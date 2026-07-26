@@ -163,7 +163,7 @@ try{document.documentElement.setAttribute('data-theme',
   .seatkey li{display:flex;flex-direction:column;align-items:flex-start;gap:5px;line-height:1.45}
   .seatkey .seat{flex:none}
   .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{border-collapse:collapse;width:100%;min-width:640px;
+  table{border-collapse:collapse;width:100%;min-width:700px;
     font-family:var(--mono);font-size:.78125rem}
   thead{position:relative;z-index:2}
   thead.is-stuck th{box-shadow:0 10px 14px -12px rgba(0,0,0,.35)}
@@ -180,6 +180,7 @@ try{document.documentElement.setAttribute('data-theme',
   td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
   th:first-child,td:first-child{padding-left:14px}
   td.name{font-family:var(--body);font-size:.875rem;color:var(--text)}
+  td.effort{color:var(--mute)}
   td.num{text-align:right;padding-right:16px}
   td.cache{text-align:right;padding-right:16px;color:var(--cache)}
   tr.dim td.cache{color:var(--dim-cache)}
@@ -200,6 +201,16 @@ try{document.documentElement.setAttribute('data-theme',
   .s-na{background:var(--chip-na-bg);color:var(--chip-na-tx)}
   .why{font-size:.65625rem;color:var(--why);font-family:var(--body)}
 
+  .effortbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+  .eff-label{font-family:var(--mono);font-size:.6875rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--mute)}
+  .effgroup{display:flex;border:1.5px solid var(--mute);border-radius:9px;
+    overflow:hidden;background:var(--panel)}
+  .effbtn{background:none;border:0;cursor:pointer;color:var(--text);
+    font-family:var(--mono);font-size:.75rem;padding:7px 13px}
+  .effbtn+.effbtn{border-left:1px solid var(--edge)}
+  .effbtn[aria-pressed="true"]{background:var(--panel-hi);color:var(--accent-text);font-weight:700}
+  .effnote{font-size:.75rem;color:var(--mute);margin:0 0 14px}
   .runs{display:grid;gap:2px;margin-top:4px}
   .run{background:var(--panel);padding:15px 17px;display:flex;
     justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
@@ -359,70 +370,80 @@ try{document.documentElement.setAttribute('data-theme',
     <thead><tr>
       <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Model <span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Seat <span class="arr" aria-hidden="true">↕</span></button></th>
+      <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Effort <span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col" class="num" data-type="num" aria-sort="ascending"><button class="sortbtn" type="button">Input <span class="arr" aria-hidden="true">▲</span></button></th>
       <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sortbtn" type="button">Caching <span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sortbtn" type="button">Output <span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col"></th>
     </tr></thead>
     <tbody>
-      <tr class="hi"><td class="name">GPT-4.1 nano</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.10</td><td class="cache">$0.025</td><td class="num">$0.40</td><td class="why">catalog floor</td></tr>
-      <tr><td class="name">GPT-4o-mini</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.15</td><td class="cache">$0.075</td><td class="num">$0.60</td><td class="why">50%-tier cache</td></tr>
-      <tr><td class="name">Llama-4 Scout</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.20</td><td class="cache">—</td><td class="num">$0.78</td><td class="why">open weights, no cache rate</td></tr>
-      <tr><td class="name">GPT-5-mini</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.25</td><td class="cache">$0.025</td><td class="num">$2.00</td><td class="why">cached in ties nano</td></tr>
-      <tr><td class="name">Llama-4 Maverick</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.35</td><td class="cache">—</td><td class="num">$1.41</td><td class="why">open weights, no cache rate</td></tr>
-      <tr><td class="name">GPT-4.1 mini</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.40</td><td class="cache">$0.10</td><td class="num">$1.60</td><td class="why">cheaper out than GPT-5-mini</td></tr>
-      <tr class="hi"><td class="name">gemini-3-flash-preview</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$0.50</td><td class="cache">$0.05</td><td class="num">$3.00</td><td class="why">cheapest cache read on the board</td></tr>
-      <tr class="hi"><td class="name">Kimi K2.5</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$0.60</td><td class="cache">$0.10</td><td class="num">$3.00</td><td class="why">automatic cache, flat rate</td></tr>
-      <tr><td class="name">Claude Haiku 4.5</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$5.00</td><td class="why"></td></tr>
-      <tr><td class="name">GPT-5.6-LUNA</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$6.00</td><td class="why"></td></tr>
-      <tr><td class="name">o4-mini</td><td><span class="seat s-value">Batch QA</span></td><td class="num">$1.10</td><td class="cache">$0.275</td><td class="num">$4.40</td><td class="why">small reasoning</td></tr>
-      <tr class="hi"><td class="name">GPT-5.1</td><td><span class="seat s-value">Value planner</span></td><td class="num">$1.25</td><td class="cache">$0.125</td><td class="num">$10.00</td><td class="why">the knife edge</td></tr>
-      <tr><td class="name">gemini-3.5-flash</td><td><span class="seat s-value">Value planner</span></td><td class="num">$1.50</td><td class="cache">$0.15</td><td class="num">$9.00</td><td class="why"></td></tr>
-      <tr><td class="name">GPT-5.2</td><td><span class="seat s-plan">Planner</span></td><td class="num">$1.75</td><td class="cache">$0.175</td><td class="num">$14.00</td><td class="why"></td></tr>
-      <tr><td class="name">GPT-4.1</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">o3 reasons at the same price</td></tr>
-      <tr class="hi"><td class="name">o3</td><td><span class="seat s-value">Batch QA</span></td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">cheapest reasoning out</td></tr>
-      <tr><td class="name">GPT-5.6-TERRA</td><td><span class="seat s-plan">Planner</span></td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why"></td></tr>
-      <tr><td class="name">Claude Sonnet 4.6</td><td><span class="seat s-plan">Planner</span></td><td class="num">$3.00</td><td class="cache">$0.30</td><td class="num">$15.00</td><td class="why"></td></tr>
-      <tr><td class="name">Claude Opus 4.7</td><td><span class="seat s-front">Frontier</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">cheaper out than SOL</td></tr>
-      <tr class="hi"><td class="name">GPT-5.6-SOL</td><td><span class="seat s-front">Frontier</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">flagship</td></tr>
+      <tr class="hi"><td class="name">GPT-4.1 nano</td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.10</td><td class="cache">$0.025</td><td class="num">$0.40</td><td class="why">catalog floor</td></tr>
+      <tr><td class="name">GPT-4o-mini</td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.15</td><td class="cache">$0.075</td><td class="num">$0.60</td><td class="why">50%-tier cache</td></tr>
+      <tr><td class="name">Llama-4 Scout</td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.20</td><td class="cache">—</td><td class="num">$0.78</td><td class="why">open weights, no cache rate</td></tr>
+      <tr><td class="name">GPT-5-mini</td><td><span class="seat s-build">Builder</span></td><td class="effort">Min</td><td class="num">$0.25</td><td class="cache">$0.025</td><td class="num">$2.00</td><td class="why">cached in ties nano</td></tr>
+      <tr><td class="name">Llama-4 Maverick</td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.35</td><td class="cache">—</td><td class="num">$1.41</td><td class="why">open weights, no cache rate</td></tr>
+      <tr><td class="name">GPT-4.1 mini</td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.40</td><td class="cache">$0.10</td><td class="num">$1.60</td><td class="why">cheaper out than GPT-5-mini</td></tr>
+      <tr class="hi"><td class="name">gemini-3-flash-preview</td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$0.50</td><td class="cache">$0.05</td><td class="num">$3.00</td><td class="why">cheapest cache read on the board</td></tr>
+      <tr class="hi"><td class="name">Kimi K2.5</td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$0.60</td><td class="cache">$0.10</td><td class="num">$3.00</td><td class="why">automatic cache, flat rate</td></tr>
+      <tr><td class="name">Claude Haiku 4.5</td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$5.00</td><td class="why"></td></tr>
+      <tr><td class="name">GPT-5.6-LUNA</td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$6.00</td><td class="why"></td></tr>
+      <tr><td class="name">o4-mini</td><td><span class="seat s-value">Batch QA</span></td><td class="effort">High</td><td class="num">$1.10</td><td class="cache">$0.275</td><td class="num">$4.40</td><td class="why">small reasoning</td></tr>
+      <tr class="hi"><td class="name">GPT-5.1</td><td><span class="seat s-value">Value planner</span></td><td class="effort">Med</td><td class="num">$1.25</td><td class="cache">$0.125</td><td class="num">$10.00</td><td class="why">the knife edge</td></tr>
+      <tr><td class="name">gemini-3.5-flash</td><td><span class="seat s-value">Value planner</span></td><td class="effort">Med</td><td class="num">$1.50</td><td class="cache">$0.15</td><td class="num">$9.00</td><td class="why"></td></tr>
+      <tr><td class="name">GPT-5.2</td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$1.75</td><td class="cache">$0.175</td><td class="num">$14.00</td><td class="why"></td></tr>
+      <tr><td class="name">GPT-4.1</td><td><span class="seat s-plus">Builder+</span></td><td class="effort">n/a</td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">o3 reasons at the same price</td></tr>
+      <tr class="hi"><td class="name">o3</td><td><span class="seat s-value">Batch QA</span></td><td class="effort">High</td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">cheapest reasoning out</td></tr>
+      <tr><td class="name">GPT-5.6-TERRA</td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why"></td></tr>
+      <tr><td class="name">Claude Sonnet 4.6</td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$3.00</td><td class="cache">$0.30</td><td class="num">$15.00</td><td class="why"></td></tr>
+      <tr><td class="name">Claude Opus 4.7</td><td><span class="seat s-front">Frontier</span></td><td class="effort">High</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">cheaper out than SOL</td></tr>
+      <tr class="hi"><td class="name">GPT-5.6-SOL</td><td><span class="seat s-front">Frontier</span></td><td class="effort">High</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">flagship</td></tr>
 
       <tr class="sect"><td colspan="6">Dominated — a newer sibling matches or beats every line</td></tr>
-      <tr class="dim"><td class="name">o3-mini</td><td><span class="seat s-dead">use o4-mini</span></td><td class="num">$1.10</td><td class="cache">$0.55</td><td class="num">$4.40</td><td class="why">same price, 2x the cached rate</td></tr>
-      <tr class="dim"><td class="name">GPT-5</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="num">$1.25</td><td class="cache">$0.13</td><td class="num">$10.00</td><td class="why">same price, older</td></tr>
-      <tr class="dim"><td class="name">GPT-4o</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="num">$2.50</td><td class="cache">$1.25</td><td class="num">$10.00</td><td class="why">cached in 10x GPT-5.1's</td></tr>
-      <tr class="dim"><td class="name">GPT-5.4</td><td><span class="seat s-dead">use TERRA</span></td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why">same price, older</td></tr>
-      <tr class="dim"><td class="name">claude-opus-4-6</td><td><span class="seat s-dead">use Opus 4.7</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">same price, older</td></tr>
-      <tr class="dim"><td class="name">GPT-5.5</td><td><span class="seat s-dead">use SOL</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">same price, older</td></tr>
-      <tr class="dim"><td class="name">o1</td><td><span class="seat s-dead">use o3</span></td><td class="num">$15.00</td><td class="cache">$7.50</td><td class="num">$60.00</td><td class="why">7.5x base, 15x cached</td></tr>
+      <tr class="dim"><td class="name">o3-mini</td><td><span class="seat s-dead">use o4-mini</span></td><td class="effort">—</td><td class="num">$1.10</td><td class="cache">$0.55</td><td class="num">$4.40</td><td class="why">same price, 2x the cached rate</td></tr>
+      <tr class="dim"><td class="name">GPT-5</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="effort">—</td><td class="num">$1.25</td><td class="cache">$0.13</td><td class="num">$10.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">GPT-4o</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="effort">—</td><td class="num">$2.50</td><td class="cache">$1.25</td><td class="num">$10.00</td><td class="why">cached in 10x GPT-5.1's</td></tr>
+      <tr class="dim"><td class="name">GPT-5.4</td><td><span class="seat s-dead">use TERRA</span></td><td class="effort">—</td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">claude-opus-4-6</td><td><span class="seat s-dead">use Opus 4.7</span></td><td class="effort">—</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">GPT-5.5</td><td><span class="seat s-dead">use SOL</span></td><td class="effort">—</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">o1</td><td><span class="seat s-dead">use o3</span></td><td class="effort">—</td><td class="num">$15.00</td><td class="cache">$7.50</td><td class="num">$60.00</td><td class="why">7.5x base, 15x cached</td></tr>
     </tbody>
   </table>
   </div>
 
   <h2>One feature, six ways</h2>
   <p class="sub">Planner 150K in / 25K out, 50% cache hit · builder 400K in / 120K out, 70% cache hit · solo ~550K in / 145K out, 50% cache hit</p>
+  <div class="effortbar">
+    <span class="eff-label">Planner effort</span>
+    <div class="effgroup" role="group" aria-label="Planner effort level">
+      <button type="button" class="effbtn" data-m="1" aria-pressed="true">Min ×1</button>
+      <button type="button" class="effbtn" data-m="2" aria-pressed="false">Med ×2</button>
+      <button type="button" class="effbtn" data-m="3" aria-pressed="false">High ×3</button>
+    </div>
+  </div>
+  <p class="effnote">Multiplier scales planner-side reasoning output only; builders stay at minimal effort. ×2 / ×3 are illustrative, not measured.</p>
   <div class="runs">
-    <div class="run best">
-      <div class="cfg"><b>TERRA plans → nano builds</b>$0.58 + $0.07 — the published floor</div>
+    <div class="run best" data-run="r1">
+      <div class="cfg"><b>TERRA plans → nano builds</b><span class="rb">$0.58 + $0.07 — the published floor</span></div>
       <div class="amt">$0.65</div>
     </div>
-    <div class="run best">
-      <div class="cfg"><b>SOL plans → nano builds</b>$1.16 + $0.07 — planner is 94% of the bill</div>
+    <div class="run best" data-run="r2">
+      <div class="cfg"><b>SOL plans → nano builds</b><span class="rb">$1.16 + $0.07 — planner 95%</span></div>
       <div class="amt">$1.23</div>
     </div>
-    <div class="run best">
-      <div class="cfg"><b>SOL plans → gemini-3-flash builds</b>$1.16 + $0.43 — the price twin</div>
+    <div class="run best" data-run="r3">
+      <div class="cfg"><b>SOL plans → gemini-3-flash builds</b><span class="rb">$1.16 + $0.43 — the price twin</span></div>
       <div class="amt">$1.60</div>
     </div>
-    <div class="run best">
-      <div class="cfg"><b>SOL plans → Kimi K2.5 builds</b>$1.16 + $0.46 — planner 72%</div>
+    <div class="run best" data-run="r4">
+      <div class="cfg"><b>SOL plans → Kimi K2.5 builds</b><span class="rb">$1.16 + $0.46 — planner 72%</span></div>
       <div class="amt">$1.62</div>
     </div>
-    <div class="run bad">
-      <div class="cfg"><b>Opus 4.7 does everything</b>No spec, no split</div>
+    <div class="run bad" data-run="r5">
+      <div class="cfg"><b>Opus 4.7 does everything</b><span class="rb">No spec, no split</span></div>
       <div class="amt">$5.14</div>
     </div>
-    <div class="run bad">
-      <div class="cfg"><b>SOL does everything</b>Same volume at flagship rates</div>
+    <div class="run bad" data-run="r6">
+      <div class="cfg"><b>SOL does everything</b><span class="rb">Same volume at flagship rates</span></div>
       <div class="amt">$5.86</div>
     </div>
   </div>
@@ -430,11 +451,23 @@ try{document.documentElement.setAttribute('data-theme',
   <div class="punch">
     <h3>In this catalog, <span>the planner is always the bill.</span></h3>
     <p>Intuition says the bill flips between tiers depending on which builder you pick. Even with cache discounts applied everywhere, it doesn't flip — because caching only touches input, and the planner's cost is dominated by <em>output</em>, which no cache discounts:</p>
-    <span class="eq">SOL $30  ÷ nano $0.40  =  75x   → planner is 94% of spend
+    <span class="eq">SOL $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
 SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
 5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely</span>
     <p><strong>The consequence cuts both ways.</strong> Downward: builder price is noise — the four builder seats above span $0.07 to $0.46 on a ~$1.60 job. Pick the builder on capability and cache behavior, never on rate. Upward: planner tokens are the only line worth engineering, and specifically planner <em>output</em>: review as diffs, verdict-plus-findings formats, no restating the spec back.</p>
     <p>The one configuration that reaches the flip is GPT-5.1 as a value planner — at $1.25 / $0.125 cached / $10 it's frontier-family judgment priced like a mid-tier. Whether its review gate is strict enough for that seat is an empirical question, not a pricing one.</p>
+  </div>
+
+  <div class="note">
+    <b>Effort levels by seat</b>
+    Reasoning effort bills as output tokens — the one line caching never discounts, and the line this page shows dominating planner cost. That makes effort a direct multiplier on the largest number in the stack, worth setting per seat rather than left at defaults:
+    <ul>
+      <li><strong>Planner:</strong> high for decomposition and spec-writing (few calls, maximum leverage per token), medium for routine diff review, escalating only when a diff gets flagged. High effort on mechanical approvals is the quiet budget leak.</li>
+      <li><strong>Batch QA:</strong> high, always — tolerating effort-driven latency off the interactive path is why the seat exists.</li>
+      <li><strong>Builder / Builder+:</strong> minimal, or thinking off. A builder burning reasoning tokens against a prescriptive spec pays planner-shaped costs at builder rates — and a builder reasoning its way around the spec is precisely the drift the review gate exists to catch.</li>
+      <li><strong>Value planner:</strong> medium by default; the seat's economics only work below flagship effort.</li>
+    </ul>
+    Two caveats. Effort knobs (reasoning_effort, thinking budgets, thinking levels) are API-level parameters, so whether Toolkit consumers can set them depends on the consumption path — a verify-with-ITS item. And published cost and speed benchmarks are measured at specific effort settings, which is part of why this page carries no speed column. The Effort column in the ladder shows the recommended default for each row's seat; n/a marks non-reasoning models with no knob.
   </div>
 
   <div class="note gov">
@@ -594,6 +627,43 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
     }
   }
   function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(updSticky);}}
+  // Planner-effort selector: scales planner-side reasoning output in the six-way runs.
+  var effData={
+    r1:{pIn:0.20625,pOut:0.375,b:0.067,note:'the published floor'},
+    r2:{pIn:0.4125,pOut:0.75,b:0.067,note:null},
+    r3:{pIn:0.4125,pOut:0.75,b:0.434,note:'the price twin'},
+    r4:{pIn:0.4125,pOut:0.75,b:0.46,note:null},
+    r5:{fix:4.5125,pOut:0.625},
+    r6:{fix:5.1125,pOut:0.75}
+  };
+  function fmt(v){return '$'+v.toFixed(2);}
+  function applyEffort(m){
+    Object.keys(effData).forEach(function(id){
+      var el=document.querySelector('[data-run="'+id+'"]');
+      if(!el)return;
+      var d=effData[id],amt;
+      if(d.fix!==undefined){
+        amt=d.fix+d.pOut*m;
+      }else{
+        var P=d.pIn+d.pOut*m;
+        amt=P+d.b;
+        var note=d.note||('planner '+Math.round(100*P/amt)+'%');
+        el.querySelector('.rb').textContent=fmt(P)+' + '+fmt(d.b)+' \u2014 '+note;
+      }
+      el.querySelector('.amt').textContent=fmt(amt);
+    });
+  }
+  var effBtns=document.querySelectorAll('.effbtn');
+  Array.prototype.forEach.call(effBtns,function(b){
+    b.addEventListener('click',function(){
+      Array.prototype.forEach.call(effBtns,function(o){
+        o.setAttribute('aria-pressed',o===b?'true':'false');
+      });
+      applyEffort(parseInt(b.getAttribute('data-m'),10));
+    });
+  });
+  applyEffort(1);
+
   window.addEventListener('scroll',onScroll,{passive:true});
   window.addEventListener('resize',onScroll);
   document.addEventListener('click',onScroll);
