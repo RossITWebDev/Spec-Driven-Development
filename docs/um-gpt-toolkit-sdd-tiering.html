@@ -450,12 +450,14 @@ try{document.documentElement.setAttribute('data-theme',
   </div>
 
   <div class="punch">
-    <h3>In this catalog, <span>the planner is always the bill.</span></h3>
+    <h3>In this catalog, <span>the planner is the the bill.</span></h3>
     <p>Intuition says the bill flips between tiers depending on which builder you pick. Even with cache discounts applied everywhere, it doesn't flip — because caching only touches input, and the planner's cost is dominated by <em>output</em>, which no cache discounts:</p>
-    <span class="eq">SOL $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
-SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
-5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely</span>
-    <p><strong>The consequence cuts both ways.</strong> Downward: builder price is noise — the four builder seats above span $0.07 to $0.46 on a ~$1.60 job. Pick the builder on capability and cache behavior, never on rate. Upward: planner tokens are the only line worth engineering, and specifically planner <em>output</em>: review as diffs, verdict-plus-findings formats, no restating the spec back.</p>
+    <span class="eq">
+      SOL $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
+      SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
+      5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely
+    </span>
+    <p><strong>The consequence cuts both ways.</strong> </br>Downward: builder price is noise — the four builder seats above span $0.07 to $0.46 on a ~$1.60 job. <strong></strong>Pick the builder on capability and cache behavior, never on rate.</strong> </br>Upward: planner tokens are the only line worth engineering, and specifically planner <em>output</em>: review as diffs, verdict-plus-findings formats, no restating the spec back.</p>
     <p>The one configuration that reaches the flip is GPT-5.1 as a value planner — at $1.25 / $0.125 cached / $10 it's frontier-family judgment priced like a mid-tier. Whether its review gate is strict enough for that seat is an empirical question, not a pricing one.</p>
   </div>
 
@@ -468,7 +470,7 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
       <li><strong>Builder / Builder+:</strong> minimal, or thinking off. A builder burning reasoning tokens against a prescriptive spec pays planner-shaped costs at builder rates — and a builder reasoning its way around the spec is precisely the drift the review gate exists to catch.</li>
       <li><strong>Value planner:</strong> medium by default; the seat's economics only work below flagship effort.</li>
     </ul>
-    Two caveats. Effort knobs (reasoning_effort, thinking budgets, thinking levels) are API-level parameters, so whether Toolkit consumers can set them depends on the consumption path — a verify-with-ITS item. And published cost and speed benchmarks are measured at specific effort settings, which is part of why this page carries no speed column. The Effort column in the ladder shows the recommended default for each row's seat; n/a marks non-reasoning models with no knob.
+    Two caveats. Effort knobs (reasoning_effort, thinking budgets, thinking levels) are API-level parameters, so whether U-M GPT Toolkit users can set them depends on the user's path — a verify-with-ITS item. Published cost and speed benchmarks are measured at specific effort settings, why this page carries no speed column. The Effort column in the ladder shows the recommended default for each row's seat; n/a marks non-reasoning models.
   </div>
 
   <div class="note gov">
@@ -482,26 +484,26 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
   </div>
 
   <div class="note">
-    <b>Cache fine print that changes real bills</b>
+    <b>Cache fine print that changes billing</b>
     <ul>
       <li><strong>Minimums and matching.</strong> Azure OpenAI caching needs a 1,024-token minimum with an identical prefix — reads are automatic, discounts land only if stable content leads the prompt.</li>
       <li><strong>Writes aren't always free.</strong> GPT-5.6-generation models bill cache writes at 1.25x input (older OpenAI models write free). Claude bills writes at 1.25x (5-min) or 2x (1-hr). Gemini explicit caching bills storage per hour.</li>
-      <li><strong>GPT-5.6 caching is still maturing on Azure.</strong> The published caching support matrix doesn't yet list the 5.6 family, and cache reads currently land via Chat Completions but not the Responses API. Cached rates shown for SOL / TERRA / LUNA ($0.50 / $0.25 / $0.10) are OpenAI-documented read rates.</li>
+      <li><strong>GPT-5.6 caching is still maturing on Azure.</strong> The published caching support matrix doesn't yet list the 5.6 family, and cache reads currently land via Chat Completions but not the Responses API. Cached rates shown for SOL / TERRA / LUNA ($0.50 / $0.25 / $0.10) are OpenAI-documented read rates. Update when more information for newest models land.</li>
     </ul>
   </div>
 
   <div class="note">
     <b>Housekeeping the ladder implies</b>
-    Seven rows are strictly dominated at identical or worse rates by newer siblings, and the cache column widens the gap: o1 is 7.5x o3 on base rates and 15x on cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on cached input despite similar base pricing. Any internal model-selection guidance should prune the dominated set; leaving it selectable is a standing invitation to overspend.
+    Seven rows are strictly dominated at identical or worse rates by newer siblings, and the cache column widens the gap: o1 is 7.5x o3 on base rates and 15x on cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on cached input despite similar base pricing. Any internal model-selection guidance should prune the dominated set; left in for illustrative purposes.
   </div>
 
   </main>
 
   <footer>
     <p>Token volumes and cache-hit rates in the six-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at cached rate, planner and solo 50%; cache-write premiums and storage meters excluded for simplicity and noted above.</p>
-    <p>A speed column is intentionally excluded. Published throughput benchmarks (e.g. Artificial Analysis) measure first-party APIs at specific reasoning-effort settings, not Azure Toolkit deployments; reasoning-model latency varies with effort level; and stable measurements don't yet exist for the newest rows. Mixed-source tokens-per-second figures would be false precision for capacity planning here.</p>
-    <p>Embedding models from the U-M ITS page are omitted: a spec-driven build/review harness assembles context from repo files and search rather than an embedding index. Add them back only if the harness includes a RAG retrieval layer.</p>
-    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x cached-input rates, GPT-5.6 cache-write multiplier); Anthropic pricing documentation (cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate.</p>
+    <p>A speed column is intentionally excluded. Published throughput benchmarks (e.g. Artificial Analysis) measure first-party APIs at specific reasoning-effort settings, not U-M GPT Toolkit deployments; reasoning-model latency varies with effort level. Mixed-source tokens-per-second figures would be false precision for capacity planning here.</p>
+    <p>Embedding models from the U-M ITS page are omitted: a spec-driven build/review harness assembles context from repo files and search rather than an embedding index. Use them only if the harness includes a RAG retrieval layer.</p>
+    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x cached-input rates, GPT-5.6 cache-write multiplier); Anthropic pricing documentation (cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate. Updated once cacche rates are confirmed from U-M ITS.</p>
     <p>Base rates: U-M ITS AI Services pricing page, per 1M tokens as published.</p>
     <div class="disclaimer">
       Sources derived from: <a href="https://its.umich.edu/computing/ai/pricing">https://its.umich.edu/computing/ai/pricing</a> in addition to Azure model catalog pricing, OpenAI, Anthropic, Google Gemini, and Moonshot AI published pricing as of 7/25/2026. Page developed with assistance from GenAI and Ross IT.
