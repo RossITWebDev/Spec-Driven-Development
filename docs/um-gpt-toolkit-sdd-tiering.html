@@ -4,7 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
-<title>U-M GPT Toolkit: Spec-Driven Dev Pricing Guide</title>
+<script>
+try{document.documentElement.setAttribute('data-theme',
+  window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');}catch(e){}
+</script>
+<title>U-M GPT Toolkit: Spec-Driven Development Pricing Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -481,10 +485,16 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
     root.setAttribute('data-theme',t);
     btn.setAttribute('aria-label', t==='dark' ? 'Switch to light theme' : 'Switch to dark theme');
   }
-  var prefersLight=false;
-  try{prefersLight=window.matchMedia('(prefers-color-scheme: light)').matches;}catch(e){}
-  setTheme(prefersLight?'light':'dark');
+  var mq=null,userOverride=false;
+  try{mq=window.matchMedia('(prefers-color-scheme: light)');}catch(e){}
+  setTheme(mq&&mq.matches?'light':'dark');
+  if(mq&&mq.addEventListener){
+    mq.addEventListener('change',function(e){
+      if(!userOverride)setTheme(e.matches?'light':'dark');
+    });
+  }
   btn.addEventListener('click',function(){
+    userOverride=true;
     setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
   });
 
