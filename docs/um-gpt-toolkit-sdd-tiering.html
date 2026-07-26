@@ -17,7 +17,7 @@
     --bg:#00274C;
     --text:#F0F4F8;
     --text-soft:#BBD0E4;
-    --mute:#93AECB;
+    --mute:#A9BFD5;
     --panel:#0D3560;
     --panel-hi:#134173;
     --edge:#1D4A7A;
@@ -26,17 +26,17 @@
     --accent-lg:#FFCB05;     /* large/bold accent */
     --accent-border:#FFCB05;
     --cache:#FFCB05;
-    --dim-cache:#BCA64D;
-    --why:#7E97B2;
-    --dim-text:#7E93AB;
-    --dim-name:#8FA6BD;
-    --footer-c:#8AA3BF;
+    --dim-cache:#CDB964;
+    --why:#A4BAD0;
+    --dim-text:#A4BAD0;
+    --dim-name:#AFC3D7;
+    --footer-c:#A9BFD5;
     --eq-bg:#001C38;
     --punch-a:#12406F;
     --focus:#FFCB05;
-    --sky:#6FB1E7;
-    --chip-plan:#1F5C9E;
-    --chip-dead-bg:#29455E; --chip-dead-tx:#A9BFD4;
+    --sky:#8CC3EF;
+    --chip-plan:#1A5290;
+    --chip-dead-bg:#29455E; --chip-dead-tx:#DCE6F0;
     --chip-na-bg:#183B61;  --chip-na-tx:#9DB4CC;
     --chip-front-bg:#F5F8FB; --chip-front-tx:#00274C;
     --pair-ring:#F5F8FB;
@@ -50,24 +50,24 @@
     --bg:#FFFFFF;
     --text:#00274C;
     --text-soft:#2E4B69;
-    --mute:#4E6478;
+    --mute:#44586C;
     --panel:#EDF2F8;
     --panel-hi:#DCE7F3;
     --edge:#C9D6E4;
     --rule:#D8E2EC;
-    --accent-text:#2E6C9C;   /* requested blue, darkened one step for small text: 5.6:1 on white */
+    --accent-text:#24587E;   /* requested blue, darkened one step for small text: 5.6:1 on white */
     --accent-lg:#3A82B9;     /* requested #3a82b9 for large/bold accents: 4.1:1, passes AA large */
     --accent-border:#3A82B9;
-    --cache:#2E6C9C;
-    --dim-cache:#4F7396;
-    --why:#5A7089;
-    --dim-text:#5A7089;
-    --dim-name:#4E6478;
-    --footer-c:#4E6478;
-    --eq-bg:#EFF4FA;
+    --cache:#24587E;
+    --dim-cache:#395672;
+    --why:#445A6E;
+    --dim-text:#445A6E;
+    --dim-name:#44586C;
+    --footer-c:#44586C;
+    --eq-bg:#F4F8FC;
     --punch-a:#E4EDF7;
     --focus:#3A82B9;
-    --chip-dead-bg:#C5D2DF; --chip-dead-tx:#2E4B69;
+    --chip-dead-bg:#C5D2DF; --chip-dead-tx:#1E3A57;
     --chip-na-bg:#D9E4EF;  --chip-na-tx:#2E4B69;
     --chip-front-bg:#00274C; --chip-front-tx:#FFFFFF;
     --pair-ring:#00274C;
@@ -86,6 +86,10 @@
   .wrap{max-width:820px;margin:0 auto}
 
   :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .skip{position:absolute;left:-9999px;top:0;z-index:10;background:var(--panel);
+    color:var(--text);font-family:var(--display);font-weight:700;
+    padding:10px 18px;border:2px solid var(--accent-border);border-radius:0 0 10px 0}
+  .skip:focus{left:0}
 
   .controls{display:flex;justify-content:space-between;align-items:center;gap:12px 10px;
     flex-wrap:wrap;margin:0 0 22px}
@@ -242,12 +246,15 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to main content</a>
 <div class="wrap">
+
+  <header>
 
   <div class="controls">
     <span class="blockm">
-      <img class="logo-dark" src="assets/um-logo-dark.png" alt="University of Michigan">
-      <img class="logo-light" src="assets/um-logo-light.png" alt="University of Michigan">
+      <img class="logo-dark" src="assets/um-logo-dark.png" alt="University of Michigan Ross IT">
+      <img class="logo-light" src="assets/um-logo-light.png" alt="University of Michigan Ross IT">
     </span>
     <div class="ctrl-cluster">
       <div class="fs-group" role="group" aria-label="Text size">
@@ -271,6 +278,10 @@
   <h1>U-M GPT Toolkit: Spec-Driven Dev Pricing Guide</h1>
   <p class="tagline">Every seat has a published price. <em>The planner is the bill.</em></p>
   <p class="lede">All rates per 1M tokens as U-M ITS publishes them, with cached-input rates from the Azure catalog and provider pricing pages. The full text-model ladder is on the board, so every seat in the split stack can be costed end to end.</p>
+
+  </header>
+
+  <main id="main">
 
   <figure>
     <div class="board">
@@ -445,6 +456,8 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
     <b>Housekeeping the ladder implies</b>
     Seven rows are strictly dominated at identical or worse rates by newer siblings, and the cache column widens the gap: o1 is 7.5x o3 on base rates and 15x on cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on cached input despite similar base pricing. Any internal model-selection guidance should prune the dominated set; leaving it selectable is a standing invitation to overspend.
   </div>
+
+  </main>
 
   <footer>
     <p>Token volumes and cache-hit rates in the six-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at cached rate, planner and solo 50%; cache-write premiums and storage meters excluded for simplicity and noted above.</p>
