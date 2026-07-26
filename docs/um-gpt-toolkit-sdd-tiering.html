@@ -1,1 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-fs="m">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>U-M GPT Toolkit: Spec-Driven Dev Pricing Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* U-M brand constants */
+    --um-blue:#00274C;
+    --um-maize:#FFCB05;
+    /* Dark theme (default) — all text tokens meet WCAG 2.1 AA on their surfaces */
+    --bg:#00274C;
+    --text:#F0F4F8;
+    --text-soft:#BBD0E4;
+    --mute:#93AECB;
+    --panel:#0D3560;
+    --panel-hi:#134173;
+    --edge:#1D4A7A;
+    --rule:#12395F;
+    --accent-text:#FFCB05;   /* small-text accent; maize on navy: 8.4:1 */
+    --accent-lg:#FFCB05;     /* large/bold accent */
+    --accent-border:#FFCB05;
+    --cache:#FFCB05;
+    --dim-cache:#BCA64D;
+    --why:#7E97B2;
+    --dim-text:#7E93AB;
+    --dim-name:#8FA6BD;
+    --footer-c:#8AA3BF;
+    --eq-bg:#001C38;
+    --punch-a:#12406F;
+    --focus:#FFCB05;
+    --sky:#6FB1E7;
+    --chip-plan:#1F5C9E;
+    --chip-dead-bg:#29455E; --chip-dead-tx:#A9BFD4;
+    --chip-na-bg:#183B61;  --chip-na-tx:#9DB4CC;
+    --chip-front-bg:#F5F8FB; --chip-front-tx:#00274C;
+    --pair-ring:#F5F8FB;
+    --center-ring:#F5F8FB;
+    --run-best-bg:#134173;
+    --display:"Space Grotesk",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --body:"IBM Plex Sans",system-ui,sans-serif;
+  }
+  [data-theme="light"]{
+    --bg:#FFFFFF;
+    --text:#00274C;
+    --text-soft:#2E4B69;
+    --mute:#4E6478;
+    --panel:#EDF2F8;
+    --panel-hi:#DCE7F3;
+    --edge:#C9D6E4;
+    --rule:#D8E2EC;
+    --accent-text:#2E6C9C;   /* requested blue, darkened one step for small text: 5.6:1 on white */
+    --accent-lg:#3A82B9;     /* requested #3a82b9 for large/bold accents: 4.1:1, passes AA large */
+    --accent-border:#3A82B9;
+    --cache:#2E6C9C;
+    --dim-cache:#4F7396;
+    --why:#5A7089;
+    --dim-text:#5A7089;
+    --dim-name:#4E6478;
+    --footer-c:#4E6478;
+    --eq-bg:#EFF4FA;
+    --punch-a:#E4EDF7;
+    --focus:#3A82B9;
+    --chip-dead-bg:#C5D2DF; --chip-dead-tx:#2E4B69;
+    --chip-na-bg:#D9E4EF;  --chip-na-tx:#2E4B69;
+    --chip-front-bg:#00274C; --chip-front-tx:#FFFFFF;
+    --pair-ring:#00274C;
+    --center-ring:#00274C;
+    --run-best-bg:#E9F0F9;
+  }
+  html[data-fs="s"]{font-size:14px}
+  html[data-fs="m"]{font-size:16px}
+  html[data-fs="l"]{font-size:18.5px}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);
+    font-size:1rem;line-height:1.6;padding:28px 18px 72px;
+    transition:background-color .25s,color .25s}
+  @media(min-width:700px){body{padding:40px 32px 88px}}
+  .wrap{max-width:820px;margin:0 auto}
 
+  :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+  .controls{display:flex;justify-content:space-between;align-items:center;gap:12px 10px;
+    flex-wrap:wrap;margin:0 0 22px}
+  .blockm{display:flex;align-items:center}
+  .blockm img{height:40px;width:auto;display:block}
+  .blockm img.logo-light{display:none}
+  [data-theme="light"] .blockm img.logo-light{display:block}
+  [data-theme="light"] .blockm img.logo-dark{display:none}
+  @media(max-width:560px){.blockm img{height:30px}}
+  .ctrl-cluster{display:flex;align-items:center;gap:10px}
+  .fs-group{display:flex;align-items:stretch;border:1.5px solid var(--mute);
+    border-radius:21px;overflow:hidden;background:var(--panel)}
+  .fsbtn{background:none;border:0;cursor:pointer;color:var(--text);
+    font-family:var(--display);font-weight:500;width:36px;height:39px;
+    display:flex;align-items:center;justify-content:center;padding:0}
+  .fsbtn+.fsbtn{border-left:1px solid var(--edge)}
+  .fs-s{font-size:12px}.fs-m{font-size:15px}.fs-l{font-size:19px}
+  .fsbtn[aria-pressed="true"]{background:var(--panel-hi);color:var(--accent-text);font-weight:700}
+  .theme-toggle{width:42px;height:42px;flex:none;
+    border-radius:50%;border:1.5px solid var(--mute);background:var(--panel);
+    color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    padding:0}
+  .theme-toggle svg{width:20px;height:20px}
+  .icon-moon{display:none}
+  [data-theme="light"] .icon-moon{display:block}
+  [data-theme="light"] .icon-sun{display:none}
+
+  .eyebrow{font-family:var(--mono);font-size:.6875rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent-text);margin:0 0 16px}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(1.75rem,6.5vw,2.875rem);
+    line-height:1.1;letter-spacing:-.02em;margin:0 0 16px;color:var(--text)}
+  .tagline{font-family:var(--display);font-weight:700;
+    font-size:clamp(1.125rem,4.6vw,1.5625rem);line-height:1.25;letter-spacing:-.015em;
+    margin:0 0 14px;color:var(--text)}
+  .tagline em{font-style:normal;color:var(--accent-lg)}
+  .lede{font-size:1rem;color:var(--text-soft);margin:0 0 30px;max-width:58ch}
+
+  figure{margin:0 auto 38px;max-width:500px;width:100%}
+  .board{background:var(--um-blue);border-radius:14px;padding:6px;
+    border:1px solid transparent}
+  [data-theme="light"] .board{border-color:var(--edge)}
+  svg{isolation:isolate}
+  .board svg{width:100%;height:auto;display:block}
+  figcaption{font-family:var(--mono);font-size:.6875rem;color:var(--mute);
+    text-align:center;margin-top:14px;letter-spacing:.04em}
+
+  .legend{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:9px 24px;
+    font-size:.84375rem;color:var(--text-soft)}
+  @media(min-width:640px){.legend{grid-template-columns:1fr 1fr}}
+  .legend li{display:flex;align-items:flex-start;line-height:1.45}
+  .legend .ln{flex:none;display:inline-flex;align-items:center;justify-content:center;
+    width:21px;height:21px;border-radius:50%;background:var(--um-maize);color:var(--um-blue);
+    border:1.5px solid var(--um-maize);
+    font-family:var(--mono);font-size:.6875rem;font-weight:700;margin:1px 10px 0 0}
+  .legend li.pair .ln{background:var(--um-blue);color:#fff;border-color:var(--pair-ring)}
+  .legend li.center .ln{background:#F5F8FB;color:var(--um-blue);border-color:var(--center-ring)}
+  .legend b{color:var(--text);font-weight:500;font-family:var(--display)}
+
+  h2{font-family:var(--display);font-weight:700;font-size:1.1875rem;
+    letter-spacing:-.01em;margin:46px 0 6px}
+  .sub{font-family:var(--mono);font-size:.6875rem;color:var(--mute);
+    letter-spacing:.12em;text-transform:uppercase;margin:0 0 18px}
+
+  .seatkey{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:14px 24px;
+    font-size:.8125rem;color:var(--text-soft)}
+  @media(min-width:640px){.seatkey{grid-template-columns:1fr 1fr}}
+  .seatkey li{display:flex;flex-direction:column;align-items:flex-start;gap:5px;line-height:1.45}
+  .seatkey .seat{flex:none}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;min-width:640px;
+    font-family:var(--mono);font-size:.78125rem}
+  thead{position:relative;z-index:2}
+  thead.is-stuck th{box-shadow:0 10px 14px -12px rgba(0,0,0,.35)}
+  th{text-align:left;font-weight:400;color:var(--mute);font-size:.625rem;
+    letter-spacing:.12em;text-transform:uppercase;padding:6px 12px 9px 0;
+    border-bottom:1px solid var(--accent-border);white-space:nowrap;
+    background:var(--bg)}
+  th.num{text-align:right}
+  .sortbtn{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;
+    letter-spacing:inherit;text-transform:inherit;cursor:pointer;
+    display:inline-flex;align-items:center;gap:5px}
+  .arr{font-family:var(--mono);color:var(--mute)}
+  th[aria-sort="ascending"] .arr,th[aria-sort="descending"] .arr{color:var(--accent-text)}
+  td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+  th:first-child,td:first-child{padding-left:14px}
+  td.name{font-family:var(--body);font-size:.875rem;color:var(--text)}
+  td.num{text-align:right;padding-right:16px}
+  td.cache{text-align:right;padding-right:16px;color:var(--cache)}
+  tr.dim td.cache{color:var(--dim-cache)}
+  tr.hi td{background:var(--panel-hi)}
+  tr.hi td.name{color:var(--text);font-weight:500}
+  tr.dim td{color:var(--dim-text)}
+  tr.dim td.name{color:var(--dim-name)}
+  tr.sect td{background:none;border-bottom:none;padding-top:20px;
+    font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .seat{font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:2px 6px;border-radius:3px;color:var(--um-blue);font-weight:700}
+  .s-build{background:var(--um-maize)}
+  .s-plus{background:var(--sky)}
+  .s-value{background:#C9DCF0}
+  .s-plan{background:var(--chip-plan);color:#fff}
+  .s-front{background:var(--chip-front-bg);color:var(--chip-front-tx)}
+  .s-dead{background:var(--chip-dead-bg);color:var(--chip-dead-tx)}
+  .s-na{background:var(--chip-na-bg);color:var(--chip-na-tx)}
+  .why{font-size:.65625rem;color:var(--why);font-family:var(--body)}
+
+  .runs{display:grid;gap:2px;margin-top:4px}
+  .run{background:var(--panel);padding:15px 17px;display:flex;
+    justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .run.best{background:var(--run-best-bg);border-left:3px solid var(--accent-border)}
+  .run.bad{border-left:3px solid var(--chip-dead-bg)}
+  .run .cfg{font-size:.90625rem;color:var(--text-soft);flex:1 1 200px}
+  .run .cfg b{color:var(--text);font-weight:500;display:block;
+    font-family:var(--display);font-size:.9375rem;margin-bottom:2px}
+  .run .amt{font-family:var(--mono);font-weight:700;font-size:1.1875rem;white-space:nowrap}
+  .run.best .amt{color:var(--accent-lg)}
+  .run.bad .amt{color:var(--mute)}
+
+  .punch{margin:44px 0 0;padding:26px 22px;
+    background:linear-gradient(150deg,var(--punch-a),var(--panel));border:1px solid var(--edge)}
+  .punch h3{font-family:var(--display);font-weight:700;
+    font-size:clamp(1.1875rem,4.4vw,1.5625rem);margin:0 0 12px;letter-spacing:-.02em;line-height:1.2}
+  .punch h3 span{color:var(--accent-lg)}
+  .punch p{margin:0 0 12px;font-size:.9375rem;color:var(--text-soft)}
+  .punch p:last-child{margin-bottom:0}
+  .punch strong{color:var(--text);font-weight:500}
+  .eq{font-family:var(--mono);font-size:.78125rem;color:var(--accent-text);
+    background:var(--eq-bg);padding:13px 15px;margin:16px 0;display:block;
+    border-left:2px solid var(--accent-border);overflow-x:auto;white-space:pre;line-height:1.9}
+
+  .note{margin-top:34px;padding:19px 20px;background:var(--panel);
+    border-top:2px solid var(--accent-border);font-size:.90625rem;color:var(--text-soft)}
+  .note b{font-family:var(--display);color:var(--text);display:block;
+    font-size:1rem;margin-bottom:7px;letter-spacing:-.01em}
+  .note ul{margin:10px 0 0;padding-left:18px}
+  .note li{margin-bottom:6px}
+  .note.gov{border-top-color:var(--sky)}
+
+  footer{margin-top:40px;font-family:var(--mono);font-size:.6875rem;
+    color:var(--footer-c);line-height:1.75}
+  footer p{margin:0 0 14px}
+  .disclaimer{margin-top:16px;padding-top:14px;border-top:1px solid var(--edge);
+    color:var(--mute)}
+  .disclaimer a{color:var(--accent-text);text-decoration:underline}
+
+  .axis-label{font-family:var(--mono);font-weight:700;font-size:29px;letter-spacing:.15em}
+  .marker-num{font-family:var(--mono);font-weight:700;font-size:24px;fill:#00274C}
+  .marker-num.inv{fill:#FFFFFF}
+
+  @media(prefers-reduced-motion:no-preference){
+    figure svg{animation:rise .7s cubic-bezier(.2,.7,.3,1) both}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="controls">
+    <span class="blockm">
+      <img class="logo-dark" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%2300274C' width='200' height='200'/%3E%3Ctext x='100' y='120' font-size='80' font-weight='bold' fill='%23FFCB05' text-anchor='middle'%3EU-M%3C/text%3E%3C/svg%3E" alt="University of Michigan">
+      <img class="logo-light" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23FFFFFF' width='200' height='200'/%3E%3Ctext x='100' y='120' font-size='80' font-weight='bold' fill='%2300274C' text-anchor='middle'%3EU-M%3C/text%3E%3C/svg%3E" alt="University of Michigan">
+    </span>
+    <div class="ctrl-cluster">
+      <div class="fs-group" role="group" aria-label="Text size">
+        <button type="button" class="fsbtn fs-s" data-fs="s" aria-pressed="false" aria-label="Small text">A</button>
+        <button type="button" class="fsbtn fs-m" data-fs="m" aria-pressed="true" aria-label="Default text">A</button>
+        <button type="button" class="fsbtn fs-l" data-fs="l" aria-pressed="false" aria-label="Large text">A</button>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <p class="eyebrow">Full catalog · published + cache rates · July 2026</p>
+  <h1>U-M GPT Toolkit: Spec-Driven Dev Pricing Guide</h1>
+  <p class="tagline">Every seat has a published price. <em>The planner is the bill.</em></p>
+  <p class="lede">All rates per 1M tokens as U-M ITS publishes them, with cached-input rates from the Azure catalog and provider pricing pages. The full text-model ladder is on the board, so every seat in the split stack can be costed end to end.</p>
+
+  <figure>
+    <div class="board">
+    <svg viewBox="168 138 564 534" role="img" aria-label="Venn diagram of cost, speed and quality with seven numbered regions, detailed in the legend below">
+      <g>
+        <circle cx="350" cy="320" r="165" fill="#FFCB05" fill-opacity=".30" style="mix-blend-mode:screen"/>
+        <circle cx="550" cy="320" r="165" fill="#6FB1E7" fill-opacity=".34" style="mix-blend-mode:screen"/>
+        <circle cx="450" cy="493" r="165" fill="#F5F8FB" fill-opacity=".26" style="mix-blend-mode:screen"/>
+      </g>
+      <g fill="none" stroke-width="1.5">
+        <circle cx="350" cy="320" r="165" stroke="#FFCB05" stroke-opacity=".65"/>
+        <circle cx="550" cy="320" r="165" stroke="#6FB1E7" stroke-opacity=".65"/>
+        <circle cx="450" cy="493" r="165" stroke="#F5F8FB" stroke-opacity=".55"/>
+      </g>
+
+      <text class="axis-label" x="248" y="232" fill="#FFCB05" text-anchor="middle">COST</text>
+      <text class="axis-label" x="652" y="232" fill="#6FB1E7" text-anchor="middle">SPEED</text>
+      <text class="axis-label" x="450" y="568" fill="#F5F8FB" text-anchor="middle">QUALITY</text>
+
+      <g text-anchor="middle">
+        <circle cx="248" cy="278" r="17" fill="#FFCB05"/>
+        <text class="marker-num" x="248" y="286">1</text>
+
+        <circle cx="652" cy="278" r="17" fill="#FFCB05"/>
+        <text class="marker-num" x="652" y="286">2</text>
+
+        <circle cx="450" cy="600" r="17" fill="#FFCB05"/>
+        <text class="marker-num" x="450" y="608">3</text>
+
+        <circle cx="335" cy="425" r="17" fill="#00274C" stroke="#F5F8FB" stroke-width="1.5"/>
+        <text class="marker-num inv" x="335" y="433">4</text>
+
+        <circle cx="450" cy="252" r="17" fill="#00274C" stroke="#F5F8FB" stroke-width="1.5"/>
+        <text class="marker-num inv" x="450" y="260">5</text>
+
+        <circle cx="565" cy="425" r="17" fill="#00274C" stroke="#F5F8FB" stroke-width="1.5"/>
+        <text class="marker-num inv" x="565" y="433">6</text>
+
+        <circle cx="450" cy="374" r="19" fill="#F5F8FB"/>
+        <text class="marker-num" x="450" y="382">7</text>
+      </g>
+    </svg>
+    </div>
+
+    <ul class="legend">
+      <li><span class="ln">1</span><span><b>Cost only</b> — cheap per token, rework hands it back; only dominated rows land here</span></li>
+      <li><span class="ln">2</span><span><b>Speed only</b> — empty by construction: fast but neither cheap nor good is a bad deal</span></li>
+      <li><span class="ln">3</span><span><b>Quality</b> — GPT-5.6-SOL $5/$30 · Claude Opus 4.7 $5/$25, the frontier gate</span></li>
+      <li class="pair"><span class="ln">4</span><span><b>Cost + Quality</b> — o3 $2/$8 batch QA · GPT-5.1 $1.25/$10 value planner</span></li>
+      <li class="pair"><span class="ln">5</span><span><b>Cost + Speed</b> — GPT-4.1 nano · $0.10 / $0.025 / $0.40, the builder floor</span></li>
+      <li class="pair"><span class="ln">6</span><span><b>Speed + Quality</b> — gemini-3-flash $0.50/$3 ≈ Kimi K2.5 $0.60/$3</span></li>
+      <li class="center"><span class="ln">7</span><span><b>All three</b> — the routing: frontier plans and gates, a cheap builder implements</span></li>
+    </ul>
+
+    <figcaption>Rates read input / cached input / output, per 1M tokens.</figcaption>
+  </figure>
+
+  <h2>The July 2026 Ladder</h2>
+  <p class="sub">Per 1M tokens · full text catalog · tap a column to sort</p>
+  <ul class="seatkey">
+    <li><span class="seat s-build">Builder</span><span>cheap typist for tightly-bounded specs; every diff gets reviewed</span></li>
+    <li><span class="seat s-plus">Builder+</span><span>carries coarser multi-file specs with fewer correction rounds</span></li>
+    <li><span class="seat s-value">Batch QA</span><span>reasoning review passes run off the interactive path</span></li>
+    <li><span class="seat s-value">Value planner</span><span>frontier-family judgment at mid-tier rates</span></li>
+    <li><span class="seat s-plan">Planner</span><span>writes specs, routes tasks, adjudicates diffs</span></li>
+    <li><span class="seat s-front">Frontier</span><span>the quality gate — final done / not-done authority</span></li>
+    <li><span class="seat s-dead">use &lt;model&gt;</span><span>dominated row — route to the named newer sibling instead</span></li>
+  </ul>
+  <div class="scroll">
+  <table id="ladder">
+    <thead><tr>
+      <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Model <span class="arr" aria-hidden="true">↕</span></button></th>
+      <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Seat <span class="arr" aria-hidden="true">↕</span></button></th>
+      <th scope="col" class="num" data-type="num" aria-sort="ascending"><button class="sortbtn" type="button">Input <span class="arr" aria-hidden="true">▲</span></button></th>
+      <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sortbtn" type="button">Caching <span class="arr" aria-hidden="true">↕</span></button></th>
+      <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sortbtn" type="button">Output <span class="arr" aria-hidden="true">↕</span></button></th>
+      <th scope="col"></th>
+    </tr></thead>
+    <tbody>
+      <tr class="hi"><td class="name">GPT-4.1 nano</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.10</td><td class="cache">$0.025</td><td class="num">$0.40</td><td class="why">catalog floor</td></tr>
+      <tr><td class="name">GPT-4o-mini</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.15</td><td class="cache">$0.075</td><td class="num">$0.60</td><td class="why">50%-tier cache</td></tr>
+      <tr><td class="name">Llama-4 Scout</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.20</td><td class="cache">—</td><td class="num">$0.78</td><td class="why">open weights, no cache rate</td></tr>
+      <tr><td class="name">GPT-5-mini</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.25</td><td class="cache">$0.025</td><td class="num">$2.00</td><td class="why">cached in ties nano</td></tr>
+      <tr><td class="name">Llama-4 Maverick</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.35</td><td class="cache">—</td><td class="num">$1.41</td><td class="why">open weights, no cache rate</td></tr>
+      <tr><td class="name">GPT-4.1 mini</td><td><span class="seat s-build">Builder</span></td><td class="num">$0.40</td><td class="cache">$0.10</td><td class="num">$1.60</td><td class="why">cheaper out than GPT-5-mini</td></tr>
+      <tr class="hi"><td class="name">gemini-3-flash-preview</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$0.50</td><td class="cache">$0.05</td><td class="num">$3.00</td><td class="why">cheapest cache read on the board</td></tr>
+      <tr class="hi"><td class="name">Kimi K2.5</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$0.60</td><td class="cache">$0.10</td><td class="num">$3.00</td><td class="why">automatic cache, flat rate</td></tr>
+      <tr><td class="name">Claude Haiku 4.5</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$5.00</td><td class="why"></td></tr>
+      <tr><td class="name">GPT-5.6-LUNA</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$6.00</td><td class="why"></td></tr>
+      <tr><td class="name">o4-mini</td><td><span class="seat s-value">Batch QA</span></td><td class="num">$1.10</td><td class="cache">$0.275</td><td class="num">$4.40</td><td class="why">small reasoning</td></tr>
+      <tr class="hi"><td class="name">GPT-5.1</td><td><span class="seat s-value">Value planner</span></td><td class="num">$1.25</td><td class="cache">$0.125</td><td class="num">$10.00</td><td class="why">the knife edge</td></tr>
+      <tr><td class="name">gemini-3.5-flash</td><td><span class="seat s-value">Value planner</span></td><td class="num">$1.50</td><td class="cache">$0.15</td><td class="num">$9.00</td><td class="why"></td></tr>
+      <tr><td class="name">GPT-5.2</td><td><span class="seat s-plan">Planner</span></td><td class="num">$1.75</td><td class="cache">$0.175</td><td class="num">$14.00</td><td class="why"></td></tr>
+      <tr><td class="name">GPT-4.1</td><td><span class="seat s-plus">Builder+</span></td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">o3 reasons at the same price</td></tr>
+      <tr class="hi"><td class="name">o3</td><td><span class="seat s-value">Batch QA</span></td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">cheapest reasoning out</td></tr>
+      <tr><td class="name">GPT-5.6-TERRA</td><td><span class="seat s-plan">Planner</span></td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why"></td></tr>
+      <tr><td class="name">Claude Sonnet 4.6</td><td><span class="seat s-plan">Planner</span></td><td class="num">$3.00</td><td class="cache">$0.30</td><td class="num">$15.00</td><td class="why"></td></tr>
+      <tr><td class="name">Claude Opus 4.7</td><td><span class="seat s-front">Frontier</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">cheaper out than SOL</td></tr>
+      <tr class="hi"><td class="name">GPT-5.6-SOL</td><td><span class="seat s-front">Frontier</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">flagship</td></tr>
+
+      <tr class="sect"><td colspan="6">Dominated — a newer sibling matches or beats every line</td></tr>
+      <tr class="dim"><td class="name">o3-mini</td><td><span class="seat s-dead">use o4-mini</span></td><td class="num">$1.10</td><td class="cache">$0.55</td><td class="num">$4.40</td><td class="why">same price, 2x the cached rate</td></tr>
+      <tr class="dim"><td class="name">GPT-5</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="num">$1.25</td><td class="cache">$0.13</td><td class="num">$10.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">GPT-4o</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="num">$2.50</td><td class="cache">$1.25</td><td class="num">$10.00</td><td class="why">cached in 10x GPT-5.1's</td></tr>
+      <tr class="dim"><td class="name">GPT-5.4</td><td><span class="seat s-dead">use TERRA</span></td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">claude-opus-4-6</td><td><span class="seat s-dead">use Opus 4.7</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">GPT-5.5</td><td><span class="seat s-dead">use SOL</span></td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">o1</td><td><span class="seat s-dead">use o3</span></td><td class="num">$15.00</td><td class="cache">$7.50</td><td class="num">$60.00</td><td class="why">7.5x base, 15x cached</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>One feature, six ways</h2>
+  <p class="sub">Planner 150K in / 25K out, 50% cache hit · builder 400K in / 120K out, 70% cache hit · solo ~550K in / 145K out, 50% cache hit</p>
+  <div class="runs">
+    <div class="run best">
+      <div class="cfg"><b>TERRA plans → nano builds</b>$0.58 + $0.07 — the published floor</div>
+      <div class="amt">$0.65</div>
+    </div>
+    <div class="run best">
+      <div class="cfg"><b>SOL plans → nano builds</b>$1.16 + $0.07 — planner is 94% of the bill</div>
+      <div class="amt">$1.23</div>
+    </div>
+    <div class="run best">
+      <div class="cfg"><b>SOL plans → gemini-3-flash builds</b>$1.16 + $0.43 — the price twin</div>
+      <div class="amt">$1.60</div>
+    </div>
+    <div class="run best">
+      <div class="cfg"><b>SOL plans → Kimi K2.5 builds</b>$1.16 + $0.46 — planner 72%</div>
+      <div class="amt">$1.62</div>
+    </div>
+    <div class="run bad">
+      <div class="cfg"><b>Opus 4.7 does everything</b>No spec, no split</div>
+      <div class="amt">$5.14</div>
+    </div>
+    <div class="run bad">
+      <div class="cfg"><b>SOL does everything</b>Same volume at flagship rates</div>
+      <div class="amt">$5.86</div>
+    </div>
+  </div>
+
+  <div class="punch">
+    <h3>In this catalog, <span>the planner is always the bill.</span></h3>
+    <p>Intuition says the bill flips between tiers depending on which builder you pick. Even with cache discounts applied everywhere, it doesn't flip — because caching only touches input, and the planner's cost is dominated by <em>output</em>, which no cache discounts:</p>
+    <span class="eq">SOL $30  ÷ nano $0.40  =  75x   → planner is 94% of spend
+SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
+5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely</span>
+    <p><strong>The consequence cuts both ways.</strong> Downward: builder price is noise — the four builder seats above span $0.07 to $0.46 on a ~$1.60 job. Pick the builder on capability and cache behavior, never on rate. Upward: planner tokens are the only line worth engineering, and specifically planner <em>output</em>: review as diffs, verdict-plus-findings formats, no restating the spec back.</p>
+    <p>The one configuration that reaches the flip is GPT-5.1 as a value planner — at $1.25 / $0.125 cached / $10 it's frontier-family judgment priced like a mid-tier. Whether its review gate is strict enough for that seat is an empirical question, not a pricing one.</p>
+  </div>
+
+  <div class="note gov">
+    <b>Kimi K2.5 and gemini-3-flash-preview, one row apart</b>
+    gemini-3-flash-preview at $0.50 / $0.05 / $3.00 and Kimi K2.5 at $0.60 / $0.10 / $3.00 occupy the same Builder+ seat, a dime apart on base input and a nickel apart on cache reads. The differences that remain are mechanics, not list price:
+    <ul>
+      <li><strong>Cache behavior.</strong> Kimi's caching is automatic and flat — no configuration, no storage meter. Gemini's explicit caching reads cheaper at $0.05 but adds a storage meter (~$1.00 per 1M tokens per hour held); its implicit caching discounts automatically without one. For a steady agent loop the two land ahead-or-even of each other depending on prefix stability and cache lifetime.</li>
+      <li><strong>Output rate is identical</strong>, and output dominates builder cost at these volumes — so the seat's real bill is the same either way.</li>
+    </ul>
+    So the honest framing for a U-M department build: the two are price-equivalent within noise. Choose between them on capability fit for the workload — a bake-off question, not a pricing one.
+  </div>
+
+  <div class="note">
+    <b>Cache fine print that changes real bills</b>
+    <ul>
+      <li><strong>Minimums and matching.</strong> Azure OpenAI caching needs a 1,024-token minimum with an identical prefix — reads are automatic, discounts land only if stable content leads the prompt.</li>
+      <li><strong>Writes aren't always free.</strong> GPT-5.6-generation models bill cache writes at 1.25x input (older OpenAI models write free). Claude bills writes at 1.25x (5-min) or 2x (1-hr). Gemini explicit caching bills storage per hour.</li>
+      <li><strong>GPT-5.6 caching is still maturing on Azure.</strong> The published caching support matrix doesn't yet list the 5.6 family, and cache reads currently land via Chat Completions but not the Responses API. Cached rates shown for SOL / TERRA / LUNA ($0.50 / $0.25 / $0.10) are OpenAI-documented read rates.</li>
+    </ul>
+  </div>
+
+  <div class="note">
+    <b>Housekeeping the ladder implies</b>
+    Seven rows are strictly dominated at identical or worse rates by newer siblings, and the cache column widens the gap: o1 is 7.5x o3 on base rates and 15x on cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on cached input despite similar base pricing. Any internal model-selection guidance should prune the dominated set; leaving it selectable is a standing invitation to overspend.
+  </div>
+
+  <footer>
+    <p>Token volumes and cache-hit rates in the six-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at cached rate, planner and solo 50%; cache-write premiums and storage meters excluded for simplicity and noted above.</p>
+    <p>A speed column is intentionally excluded. Published throughput benchmarks (e.g. Artificial Analysis) measure first-party APIs at specific reasoning-effort settings, not Azure Toolkit deployments; reasoning-model latency varies with effort level; and stable measurements don't yet exist for the newest rows. Mixed-source tokens-per-second figures would be false precision for capacity planning here.</p>
+    <p>Embedding models from the U-M ITS page are omitted: a spec-driven build/review harness assembles context from repo files and search rather than an embedding index. Add them back only if the harness includes a RAG retrieval layer.</p>
+    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x cached-input rates, GPT-5.6 cache-write multiplier); Anthropic pricing documentation (cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate.</p>
+    <p>Base rates: U-M ITS AI Services pricing page, per 1M tokens as published.</p>
+    <div class="disclaimer">
+      Sources derived from U-M ITS AI Services pricing documentation and provider pricing pages as of 7/25/2026.
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  // Theme toggle — no persistence (in-memory only); initial theme follows OS preference.
+  var root=document.documentElement;
+  var btn=document.getElementById('themeToggle');
+  function setTheme(t){
+    root.setAttribute('data-theme',t);
+    btn.setAttribute('aria-label', t==='dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  }
+  var prefersLight=false;
+  try{prefersLight=window.matchMedia('(prefers-color-scheme: light)').matches;}catch(e){}
+  setTheme(prefersLight?'light':'dark');
+  btn.addEventListener('click',function(){
+    setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+
+  // Text size control — A | A | A, defaults to middle.
+  var fsBtns=document.querySelectorAll('.fsbtn');
+  Array.prototype.forEach.call(fsBtns,function(b){
+    b.addEventListener('click',function(){
+      root.setAttribute('data-fs',b.getAttribute('data-fs'));
+      Array.prototype.forEach.call(fsBtns,function(o){
+        o.setAttribute('aria-pressed',o===b?'true':'false');
+      });
+    });
+  });
+
+  // Sortable columns — sorts within each section (main ladder / dominated) independently.
+  var table=document.getElementById('ladder');
+  var tbody=table.tBodies[0];
+  var ths=table.tHead.rows[0].cells;
+
+  function cellKey(row,col,type){
+    var cell=row.cells[col];
+    var txt=cell?cell.textContent.trim():'';
+    if(type==='num'){
+      var v=parseFloat(txt.replace(/[$,]/g,''));
+      return isNaN(v)?null:v;   // null = missing, always sorts last
+    }
+    return txt.toLowerCase();
+  }
+  function groups(){
+    var out=[],cur={header:null,rows:[]};
+    Array.prototype.forEach.call(tbody.rows,function(r){
+      if(r.classList.contains('sect')){
+        out.push(cur);cur={header:r,rows:[]};
+      }else{cur.rows.push(r);}
+    });
+    out.push(cur);
+    return out;
+  }
+  function sortBy(col,type,dir){
+    var gs=groups();
+    gs.forEach(function(g){
+      g.rows.sort(function(a,b){
+        var ka=cellKey(a,col,type),kb=cellKey(b,col,type);
+        if(ka===null&&kb===null)return 0;
+        if(ka===null)return 1;           // missing values last, both directions
+        if(kb===null)return -1;
+        if(ka<kb)return dir==='asc'?-1:1;
+        if(ka>kb)return dir==='asc'?1:-1;
+        return 0;
+      });
+    });
+    gs.forEach(function(g){
+      if(g.header)tbody.appendChild(g.header);
+      g.rows.forEach(function(r){tbody.appendChild(r);});
+    });
+  }
+  Array.prototype.forEach.call(ths,function(th,i){
+    var b=th.querySelector('.sortbtn');
+    if(!b)return;
+    b.addEventListener('click',function(){
+      var type=th.getAttribute('data-type')||'text';
+      var cur=th.getAttribute('aria-sort');
+      var dir=cur==='ascending'?'desc':'asc';
+      Array.prototype.forEach.call(ths,function(o){
+        if(o.querySelector('.sortbtn')){
+          o.setAttribute('aria-sort','none');
+          var ar=o.querySelector('.arr');
+          if(ar)ar.textContent='↕';
+        }
+      });
+      th.setAttribute('aria-sort',dir==='asc'?'ascending':'descending');
+      var arr=th.querySelector('.arr');
+      if(arr)arr.textContent=dir==='asc'?'▲':'▼';
+      sortBy(i,type,dir);
+    });
+  });
+
+  // Sticky table header: pinned to the viewport top while the table is in view,
+  // pushed out with the table's bottom edge once you scroll past it.
+  var scrollBox=document.querySelector('.scroll');
+  var thead=table.tHead;
+  var ticking=false;
+  function updSticky(){
+    ticking=false;
+    var rect=scrollBox.getBoundingClientRect();
+    var hH=thead.offsetHeight;
+    var off=0;
+    if(rect.top<0){
+      off=Math.max(0,Math.min(-rect.top,rect.height-hH));
+    }
+    if(off>0){
+      thead.style.transform='translateY('+off+'px)';
+      thead.classList.add('is-stuck');
+    }else{
+      thead.style.transform='';
+      thead.classList.remove('is-stuck');
+    }
+  }
+  function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(updSticky);}}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  document.addEventListener('click',onScroll);
+  updSticky();
+})();
+</script>
+</body>
+</html>
