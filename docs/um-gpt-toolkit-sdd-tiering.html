@@ -132,7 +132,7 @@ try{document.documentElement.setAttribute('data-theme',
   .tagline em{font-style:normal;color:var(--accent-lg)}
   .lede{font-size:1rem;color:var(--text-soft);margin:0 0 30px}
 
-  figure{margin:0 auto 38px;max-width:700px;width:100%}
+  figure{margin:0 auto 38px;max-width:500px;width:100%}
   .board{background:var(--um-blue);border-radius:14px;padding:6px;
     border:1px solid transparent}
   [data-theme="light"] .board{border-color:var(--edge)}
@@ -143,7 +143,7 @@ try{document.documentElement.setAttribute('data-theme',
 
   .legend{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:9px 24px;
     font-size:.84375rem;color:var(--text-soft)}
-  @media(min-width:640px){.legend{grid-template-columns:1fr 1fr 1fr}}
+  @media(min-width:640px){.legend{grid-template-columns:1fr 1fr}}
   .legend li{display:flex;align-items:flex-start;line-height:1.45}
   .legend .ln{flex:none;display:inline-flex;align-items:center;justify-content:center;
     width:21px;height:21px;border-radius:50%;background:var(--um-maize);color:var(--um-blue);
@@ -152,6 +152,14 @@ try{document.documentElement.setAttribute('data-theme',
   .legend li.pair .ln{background:var(--um-blue);color:#fff;border-color:var(--pair-ring)}
   .legend li.center .ln{background:#F5F8FB;color:var(--um-blue);border-color:var(--center-ring)}
   .legend b{color:var(--text);font-weight:500;font-family:var(--display)}
+  @media(min-width:800px){
+    figure{max-width:none;display:grid;
+      grid-template-columns:minmax(0,460px) minmax(0,1fr);
+      gap:12px 30px;align-items:center}
+    .board{grid-row:1}
+    figure .legend{grid-template-columns:1fr;margin:0}
+    figcaption{grid-column:1/-1}
+  }
 
   h2{font-family:var(--display);font-weight:700;font-size:1.1875rem;
     letter-spacing:-.01em;margin:46px 0 6px}
@@ -399,7 +407,7 @@ try{document.documentElement.setAttribute('data-theme',
       <tr><td class="name">Claude Opus 4.7</td><td><span class="seat s-front">Frontier</span></td><td class="effort">High</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">cheaper out than SOL</td></tr>
       <tr class="hi"><td class="name">GPT-5.6-SOL</td><td><span class="seat s-front">Frontier</span></td><td class="effort">High</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">flagship</td></tr>
 
-      <tr class="sect"><td colspan="6">Dominated — a newer sibling matches or beats every line</td></tr>
+      <tr class="sect"><td colspan="7">Dominated — a newer sibling matches or beats every line</td></tr>
       <tr class="dim"><td class="name">o3-mini</td><td><span class="seat s-dead">use o4-mini</span></td><td class="effort">—</td><td class="num">$1.10</td><td class="cache">$0.55</td><td class="num">$4.40</td><td class="why">same price, 2x the cached rate</td></tr>
       <tr class="dim"><td class="name">GPT-5</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="effort">—</td><td class="num">$1.25</td><td class="cache">$0.13</td><td class="num">$10.00</td><td class="why">same price, older</td></tr>
       <tr class="dim"><td class="name">GPT-4o</td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="effort">—</td><td class="num">$2.50</td><td class="cache">$1.25</td><td class="num">$10.00</td><td class="why">cached in 10x GPT-5.1's</td></tr>
@@ -456,11 +464,9 @@ try{document.documentElement.setAttribute('data-theme',
   <div class="punch">
     <h3>In this catalog, <span>the planner is the bill.</span></h3>
     <p>Intuition says the bill flips between tiers depending on which builder you pick. Even with cache discounts applied everywhere, it doesn't flip — because caching only touches input, and the planner's cost is dominated by <em>output</em>, which no cache discounts:</p>
-    <span class="eq">
-      SOL $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
-      SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
-      5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely
-    </span>
+    <span class="eq">SOL $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
+SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
+5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely</span>
     <p><strong>The consequence cuts both ways.</strong></p> <p><strong>Downward:</strong> builder price is noise — the four builder seats above span $0.07 to $0.46 on a ~$1.60 job. <strong>Pick the builder on capability and cache behavior, never on rate.</strong></p> <p><strong>Upward:</strong> planner tokens are the only line worth engineering, and specifically planner <em>output</em>: review as diffs, verdict-plus-findings formats, no restating the spec back.</p>
     <p>The one configuration that reaches the flip is GPT-5.1 as a value planner — at $1.25 / $0.125 cached / $10 it's frontier-family judgment priced like a mid-tier. Whether its review gate is strict enough for that seat is an empirical question, not a pricing one.</p>
   </div>
@@ -508,7 +514,7 @@ try{document.documentElement.setAttribute('data-theme',
     <p>Token volumes and cache-hit rates in the six-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at cached rate, planner and solo 50%; cache-write premiums and storage meters excluded for simplicity and noted above.</p>
     <p>A speed column is intentionally excluded. Published throughput benchmarks (e.g. Artificial Analysis) measure first-party APIs at specific reasoning-effort settings, not U-M GPT Toolkit deployments; reasoning-model latency varies with effort level. Mixed-source tokens-per-second figures would be false precision for capacity planning here.</p>
     <p>Embedding models from the U-M ITS page are omitted: a spec-driven build/review harness assembles context from repo files and search rather than an embedding index. Use them only if the harness includes a RAG retrieval layer.</p>
-    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x cached-input rates, GPT-5.6 cache-write multiplier); Anthropic pricing documentation (cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate. Updated once cacche rates are confirmed from U-M ITS.</p>
+    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x cached-input rates, GPT-5.6 cache-write multiplier); Anthropic pricing documentation (cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate. Updated once cache rates are confirmed from U-M ITS.</p>
     <p>Base rates: U-M ITS AI Services pricing page, per 1M tokens as published.</p>
     <div class="disclaimer">
       Sources derived from: <a href="https://its.umich.edu/computing/ai/pricing">https://its.umich.edu/computing/ai/pricing</a> in addition to Azure model catalog pricing, OpenAI, Anthropic, Google Gemini, and Moonshot AI published pricing as of 7/25/2026. Page developed with assistance from GenAI and Ross IT.
