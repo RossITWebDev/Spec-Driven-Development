@@ -328,7 +328,7 @@ try{document.documentElement.setAttribute('data-theme',
 
   <figure>
     <div class="board">
-    <svg viewBox="168 138 564 534" role="img" aria-label="Venn diagram of cost, speed and quality with seven numbered regions, detailed in the legend below">
+    <svg viewBox="168 138 564 534" role="img" aria-label="Venn diagram of cost estimates, speed and quality with seven numbered regions, detailed in the legend below">
       <g>
         <circle cx="350" cy="320" r="165" fill="#FFCB05" fill-opacity=".30" style="mix-blend-mode:screen"/>
         <circle cx="550" cy="320" r="165" fill="#6FB1E7" fill-opacity=".34" style="mix-blend-mode:screen"/>
@@ -340,7 +340,7 @@ try{document.documentElement.setAttribute('data-theme',
         <circle cx="450" cy="493" r="165" stroke="#F5F8FB" stroke-opacity=".55"/>
       </g>
 
-      <text class="axis-label" x="248" y="232" fill="#FFCB05" text-anchor="middle">COST</text>
+      <text class="axis-label" x="248" y="232" fill="#FFCB05" text-anchor="middle">COST (estimates)</text>
       <text class="axis-label" x="652" y="232" fill="#6FB1E7" text-anchor="middle">SPEED</text>
       <text class="axis-label" x="450" y="568" fill="#F5F8FB" text-anchor="middle">QUALITY</text>
 
@@ -379,7 +379,7 @@ try{document.documentElement.setAttribute('data-theme',
       <li class="center"><span class="ln">7</span><span><b>All three</b> — the routing: frontier plans and gates, a cheap builder implements</span></li>
     </ul>
 
-    <figcaption>Rates read input / cached input / output, per 1M tokens.</figcaption>
+    <figcaption>Rates read input / cached input (estimates) / output, per 1M tokens.</figcaption>
   </figure>
 
   <h2>The July 2026 Ladder</h2>
@@ -402,7 +402,7 @@ try{document.documentElement.setAttribute('data-theme',
       <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Seat <span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Effort <span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col" class="num" data-type="num" aria-sort="ascending"><button class="sortbtn" type="button">Input <span class="arr" aria-hidden="true">▲</span></button></th>
-      <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sortbtn" type="button">Caching <span class="arr" aria-hidden="true">↕</span></button></th>
+      <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sortbtn" type="button">Caching Est.<span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col" class="num" data-type="num" aria-sort="none"><button class="sortbtn" type="button">Output <span class="arr" aria-hidden="true">↕</span></button></th>
       <th scope="col"></th>
     </tr></thead>
@@ -485,12 +485,12 @@ try{document.documentElement.setAttribute('data-theme',
 
   <div class="punch">
     <h3>In this catalog, <span>the planner is the bill.</span></h3>
-    <p>Intuition says the bill flips between tiers depending on which builder you pick. Even with cache discounts applied everywhere, it doesn't flip — because caching only touches input, and the planner's cost is dominated by <em>output</em>, which no cache discounts:</p>
+    <p>Intuition says the bill flips between tiers depending on which builder you pick. Even with cache estimate discounts applied everywhere, it doesn't flip — because caching only touches input, and the planner's cost is dominated by <em>output</em>, which no cache discounts:</p>
     <span class="eq">SOL $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
 SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
 5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely</span>
     <p><strong>The consequence cuts both ways.</strong></p> <p><strong>Downward:</strong> builder price is noise — the four builder seats above span $0.07 to $0.46 on a ~$1.60 job. <strong>Pick the builder on capability and cache behavior, never on rate.</strong></p> <p><strong>Upward:</strong> planner tokens are the only line worth engineering, and specifically planner <em>output</em>: review as diffs, verdict-plus-findings formats, no restating the spec back.</p>
-    <p>The one configuration that reaches the flip is GPT-5.1 as a value planner — at $1.25 / $0.125 cached / $10 it's frontier-family judgment priced like a mid-tier. Whether its review gate is strict enough for that seat is an empirical question, not a pricing one.</p>
+    <p>The one configuration that reaches the flip is GPT-5.1 as a value planner — at $1.25 / $0.125 cached (estimate) / $10 it's frontier-family judgment priced like a mid-tier. Whether its review gate is strict enough for that seat is an empirical question, not a pricing one.</p>
   </div>
 
   <div class="note">
@@ -507,9 +507,9 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
 
   <div class="note gov">
     <b>Kimi K2.5 and gemini-3-flash-preview, one row apart</b>
-    gemini-3-flash-preview at $0.50 / $0.05 / $3.00 and Kimi K2.5 at $0.60 / $0.10 / $3.00 occupy the same Builder+ seat, a dime apart on base input and a nickel apart on cache reads. The differences that remain are mechanics, not list price:
+    gemini-3-flash-preview at $0.50 / $0.05 / $3.00 and Kimi K2.5 at $0.60 / $0.10 / $3.00 occupy the same Builder+ seat, a dime apart on base input and a nickel apart on estimated cache reads. The differences that remain are mechanics, not list price:
     <ul>
-      <li><strong>Cache behavior.</strong> Kimi's caching is automatic and flat — no configuration, no storage meter. Gemini's explicit caching reads cheaper at $0.05 but adds a storage meter (~$1.00 per 1M tokens per hour held); its implicit caching discounts automatically without one. For a steady agent loop the two land ahead-or-even of each other depending on prefix stability and cache lifetime.</li>
+      <li><strong>Estimated Cache behavior.</strong> Kimi's caching is automatic and flat — no configuration, no storage meter. Gemini's explicit caching reads cheaper at $0.05 but adds a storage meter (~$1.00 per 1M tokens per hour held); its implicit caching estimate discounts automatically without one. For a steady agent loop the two land ahead-or-even of each other depending on prefix stability and cache lifetime estimates.</li>
       <li><strong>Output rate is identical</strong>, and output dominates builder cost at these volumes — so the seat's real bill is the same either way.</li>
     </ul>
     <p>So the honest framing for a U-M department build: the two are price-equivalent within noise. Choose between them on capability fit for the workload — a bake-off question, not a pricing one.</p>
@@ -517,26 +517,26 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
   </div>
 
   <div class="note">
-    <b>Cache fine print that changes billing</b>
+    <b>Cache estimates fine print that changes billing</b>
     <ul>
       <li><strong>Minimums and matching.</strong> Azure OpenAI caching needs a 1,024-token minimum with an identical prefix — reads are automatic, discounts land only if stable content leads the prompt.</li>
-      <li><strong>Writes aren't always free.</strong> GPT-5.6-generation models bill cache writes at 1.25x input (older OpenAI models write free). Claude bills writes at 1.25x (5-min) or 2x (1-hr). Gemini explicit caching bills storage per hour.</li>
-      <li><strong>GPT-5.6 caching is still maturing on Azure.</strong> The published caching support matrix doesn't yet list the 5.6 family, and cache reads currently land via Chat Completions but not the Responses API. Cached rates shown for SOL / TERRA / LUNA ($0.50 / $0.25 / $0.10) are OpenAI-documented read rates. Update when more information for newest models land.</li>
+      <li><strong>Writes aren't always free.</strong> GPT-5.6-generation models bill cache estimate writes at 1.25x input (older OpenAI models write free). Claude bills writes at 1.25x (5-min) or 2x (1-hr). Gemini explicit caching bills storage per hour.</li>
+      <li><strong>GPT-5.6 caching is still maturing on Azure.</strong> The published caching support matrix doesn't yet list the 5.6 family, and cache reads currently land via Chat Completions but not the Responses API. Estimated cached rates shown for SOL / TERRA / LUNA ($0.50 / $0.25 / $0.10) are OpenAI-documented read rates and are for illustrative purposes in this guide. </li>
     </ul>
   </div>
 
   <div class="note">
     <b>Housekeeping the ladder implies</b>
-    Seven rows are strictly dominated at identical or worse rates by newer siblings, and the cache column widens the gap: o1 is 7.5x o3 on base rates and 15x on cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on cached input despite similar base pricing. Any internal model-selection guidance should prune the dominated set; left in for illustrative purposes.
+    Seven rows are strictly dominated at identical or worse rates by newer siblings, and the cache estimates column widens the gap: o1 is 7.5x o3 on base rates and 15x on estimated cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on estimated cached input despite similar base pricing. Any internal model-selection guidance should prune the dominated set; left in for illustrative purposes.
   </div>
 
   </main>
 
   <footer>
-    <p>Token volumes and cache-hit rates in the six-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at cached rate, planner and solo 50%; cache-write premiums and storage meters excluded for simplicity and noted above.</p>
+    <p>Token volumes and estimated cache-hit rates in the six-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at estimated cached rate, planner and solo 50%; estimated cache-write premiums and storage meters excluded for simplicity and noted above.</p>
     <p>A speed column is intentionally excluded. Published throughput benchmarks (e.g. Artificial Analysis) measure first-party APIs at specific reasoning-effort settings, not U-M GPT Toolkit deployments; reasoning-model latency varies with effort level. Mixed-source tokens-per-second figures would be false precision for capacity planning here.</p>
     <p>Embedding models from the U-M ITS page are omitted: a spec-driven build/review harness assembles context from repo files and search rather than an embedding index. Use them only if the harness includes a RAG retrieval layer.</p>
-    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x cached-input rates, GPT-5.6 cache-write multiplier); Anthropic pricing documentation (cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate. Updated once cache rates are confirmed from U-M ITS.</p>
+    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x estimated cached-input rates, GPT-5.6 estimated cache-write multiplier); Anthropic pricing documentation (estimated cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 estimated cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate. Updated once estimated cache rates can be confirmed from U-M ITS, potentially at a later date.</p>
     <p>Base rates: U-M ITS AI Services pricing page, per 1M tokens as published.</p>
     <div class="disclaimer">
       Sources derived from: <a href="https://its.umich.edu/computing/ai/pricing">https://its.umich.edu/computing/ai/pricing</a> in addition to Azure model catalog pricing, OpenAI, Anthropic, Google Gemini, and Moonshot AI published pricing as of 7/25/2026. Page developed with assistance from GenAI and Ross IT.
