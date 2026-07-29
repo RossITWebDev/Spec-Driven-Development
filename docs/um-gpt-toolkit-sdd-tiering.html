@@ -539,7 +539,7 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
     <ul>
       <li><strong>Minimums and matching.</strong> Azure OpenAI caching needs a 1,024-token minimum with an identical prefix — reads are automatic, discounts land only if stable content leads the prompt.</li>
       <li><strong>Writes aren't always free.</strong> GPT-5.6-generation models bill cache estimate writes at 1.25x input (older OpenAI models write free). Claude bills writes at 1.25x (5-min) or 2x (1-hr). Gemini explicit caching bills storage per hour.</li>
-      <li><strong>GPT-5.6 caching is still maturing on Azure.</strong> The published caching support matrix doesn't yet list the 5.6 family, and cache reads currently land via Chat Completions but not the Responses API. Estimated cached rates shown for SOL / TERRA / LUNA ($0.50 / $0.25 / $0.10) are OpenAI-documented read rates and are for illustrative purposes in this guide. </li>
+      <li><strong>Azure documentation now describes GPT-5.6 caching for both Chat Completions and Responses</strong>, including prompt_cache_key. Whether U-M Toolkit exposes the same behavior, reporting fields, and billing treatment should be confirmed through Toolkit telemetry or ITS documentation. </li>
     </ul>
   </div>
 
