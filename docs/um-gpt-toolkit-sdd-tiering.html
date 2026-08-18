@@ -274,6 +274,20 @@ try{document.documentElement.setAttribute('data-theme',
   .note li{margin-bottom:6px}
   .note.gov{border-top-color:var(--sky)}
 
+  /* Collapsible notes — native details/summary, collapsed on load */
+  .acc summary{display:block;list-style:none;cursor:pointer}
+  .acc summary::-webkit-details-marker{display:none}
+  .acc summary::marker{content:""}
+  .acc-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .acc summary b{margin-bottom:0}
+  .acc summary:hover b{color:var(--accent-text)}
+  .acc-arrow{flex:none;width:19px;height:19px;color:var(--accent-text)}
+  .acc[open] summary{margin-bottom:7px}
+  .acc[open] .acc-arrow{transform:rotate(180deg)}
+  @media(prefers-reduced-motion:no-preference){
+    .acc-arrow{transition:transform .2s ease}
+  }
+
   footer{margin-top:40px;font-family:var(--mono);font-size:.6875rem;
     color:var(--footer-c);line-height:1.75}
   footer p{margin:0 0 14px}
@@ -329,10 +343,10 @@ try{document.documentElement.setAttribute('data-theme',
     </div>
   </div>
 
-  <p class="eyebrow">U-M GPT Toolkit Published Models + Estimated Cache Rates · Planner + Build · July 2026</p>
+  <p class="eyebrow">U-M GPT Toolkit Published Models + Estimated Cache Rates · Planner + Build · August 2026</p>
   <h1>U-M GPT Toolkit: Spec-Driven Development Pricing Guide</h1>
   <p class="tagline">Every seat has a published price. <em>Under the illustrated workload, planner output is usually the largest model-token cost.</em></p>
-  <p class="lede">All rates per 1M tokens as U-M ITS publishes them, with estimated cached-input rates from the Azure catalog and provider pricing pages. U-M ITS does not currently provide cached model rates at this time, treat current cached-input rates as estimations for illutrative purposes in this Spec-Driven Development pricing guide. The full text-model ladder is on the board, so every seat in the split stack can be estimated end to end.</p>
+  <p class="lede">All rates per 1M tokens as U-M ITS publishes them, with estimated cached-input rates from the Azure catalog and provider pricing pages. U-M ITS does not currently provide cached model rates at this time, treat current cached-input rates as estimations for illustrative purposes in this Spec-Driven Development pricing guide. The full text-model ladder is on the board, so every seat in the split stack can be estimated end to end.</p>
 
   </header>
 
@@ -390,17 +404,28 @@ try{document.documentElement.setAttribute('data-theme',
     <ul class="legend">
       <li><span class="ln">1</span><span><b>Cost only</b> — cheap per token, rework hands it back; only dominated rows land here</span></li>
       <li><span class="ln">2</span><span><b>Speed only</b> — empty by construction: fast but neither cheap nor good is a bad deal</span></li>
-      <li><span class="ln">3</span><span><b>Quality</b> — GPT-5.6-SOL $5/$30 · Claude Opus 4.7 $5/$25, the frontier gate</span></li>
-      <li class="pair"><span class="ln">4</span><span><b>Cost + Quality</b> — o3 $2/$8 batch QA · GPT-5.1 $1.25/$10 value planner</span></li>
-      <li class="pair"><span class="ln">5</span><span><b>Cost + Speed</b> — GPT-4.1 nano · $0.10 / $0.025 / $0.40, the builder floor</span></li>
-      <li class="pair"><span class="ln">6</span><span><b>Speed + Quality</b> — gemini-3-flash $0.50/$3 ≈ Kimi K2.5 $0.60/$3</span></li>
+      <li><span class="ln">3</span><span><b>Quality</b> — GPT-5.6-SOL $5/$30 · Claude Opus 5 $5/$25, the frontier gate</span></li>
+      <li class="pair"><span class="ln">4</span><span><b>Cost + Quality</b> — o3 $2/$8 batch QA · GPT-5.1 $1.25/$10 value planner · Claude Sonnet 5 $2/$10</span></li>
+      <li class="pair"><span class="ln">5</span><span><b>Cost + Speed</b> — GPT-4.1 nano $0.10 / $0.025 / $0.40 · GPT-5.6-LUNA $0.20 / $0.02 / $1.20, the builder floor</span></li>
+      <li class="pair"><span class="ln">6</span><span><b>Speed + Quality</b> — gemini-3-flash $0.50/$3 ≈ Kimi K2.5 $0.60/$3, both now undercut by LUNA</span></li>
       <li class="center"><span class="ln">7</span><span><b>All three</b> — the routing: frontier plans and gates, a cheap builder implements</span></li>
     </ul>
 
     <figcaption>Rates read input / cached input (estimates) / output, per 1M tokens.</figcaption>
   </figure>
 
-  <h2>The July 2026 Ladder</h2>
+  <div class="note">
+    <b>What changed since the July 2026 edition</b>
+    Four movements on the ITS Toolkit table, all verified against the live page and the upstream provider rate cards:
+    <ul>
+      <li><strong>GPT-5.6-LUNA fell 80%</strong>, from $1.00 / $6.00 to <strong>$0.20 / $1.20</strong>, and <strong>GPT-5.6-TERRA fell 20%</strong>, from $2.50 / $15.00 to <strong>$2.00 / $12.00</strong>. Both track OpenAI's July 30 price cut; SOL did not move. Estimated cached input follows at 0.1x, so LUNA reads at about $0.02 — the cheapest cache read on the board by a factor of two.</li>
+      <li><strong>Four Claude models were added:</strong> claude-sonnet-5 ($2.00 / $10.00), claude-opus-4-8 and claude-opus-5 (both $5.00 / $25.00), joining the existing Opus 4.6 and 4.7 rows at the same rate.</li>
+      <li><strong>The dominated set grew from seven rows to twelve.</strong> Sonnet 4.6 is now beaten on every line by Sonnet 5; GPT-5.4 is beaten by the cheaper TERRA; three Opus rows sit at one price below Opus 5; and GPT-5-mini and GPT-4.1 mini are both beaten on all three lines by LUNA.</li>
+      <li><strong>The cheapest illustrated split dropped from $0.65 to $0.53</strong> — and almost all of that came from the planner-side cut, not the builder-side one. See the seven-way comparison below.</li>
+    </ul>
+  </div>
+
+  <h2>The August 2026 Ladder</h2>
   <p class="sub">Per 1M tokens · full text catalog · tap a column to sort</p>
   <ul class="seatkey">
     <li><span class="seat s-build">Builder</span><span>cheap typist for tightly-bounded specs; every diff gets reviewed</span></li>
@@ -408,11 +433,11 @@ try{document.documentElement.setAttribute('data-theme',
     <li><span class="seat s-value">Batch QA</span><span>reasoning review passes run off the interactive path</span></li>
     <li><span class="seat s-value">Value planner</span><span>frontier-family judgment at mid-tier rates</span></li>
     <li><span class="seat s-plan">Planner</span><span>writes specs, routes tasks, adjudicates diffs</span></li>
-    <li><span class="seat s-front">Frontier reviewer</span><span>djudicates ambiguous or high-risk diffs; deterministic controls and designated human approval remain authoritative.</span></li>
+    <li><span class="seat s-front">Frontier reviewer</span><span>adjudicates ambiguous or high-risk diffs; deterministic controls and designated human approval remain authoritative.</span></li>
     <li><span class="seat s-dead">use &lt;model&gt;</span><span>dominated row — route to the named newer sibling instead</span></li>
     <li><span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> <svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></span><span>All U-M GPT Claude models and Llama-4 Maverick are not authorized for use with Protected Health Information (PHI). A green check marks models available for PHI work; a red slash marks models that are not.</span></li>
   </ul>
-  <div class="scroll">
+  <div class="scroll" role="region" aria-label="Model rate ladder, August 2026 — scrollable table" tabindex="0">
   <table id="ladder">
     <thead><tr>
       <th scope="col" data-type="text" aria-sort="none"><button class="sortbtn" type="button">Model <span class="arr" aria-hidden="true">↕</span></button></th>
@@ -427,39 +452,42 @@ try{document.documentElement.setAttribute('data-theme',
     <tbody>
       <tr class="hi"><td class="name">GPT-4.1 nano</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.10</td><td class="cache">$0.025</td><td class="num">$0.40</td><td class="why">catalog floor</td></tr>
       <tr><td class="name">GPT-4o-mini</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.15</td><td class="cache">$0.075</td><td class="num">$0.60</td><td class="why">50%-tier cache</td></tr>
+      <tr class="hi"><td class="name">GPT-5.6-LUNA</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$0.20</td><td class="cache">$0.02</td><td class="num">$1.20</td><td class="why">cut 80% on 7/30; cheapest cache read on the board</td></tr>
       <tr><td class="name">Llama-4 Scout</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.20</td><td class="cache">—</td><td class="num">$0.78</td><td class="why">open weights, no cache rate</td></tr>
-      <tr><td class="name">GPT-5-mini</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-build">Builder</span></td><td class="effort">Min</td><td class="num">$0.25</td><td class="cache">$0.025</td><td class="num">$2.00</td><td class="why">cached in ties nano</td></tr>
       <tr><td class="name">Llama-4 Maverick</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.35</td><td class="cache">—</td><td class="num">$1.41</td><td class="why">open weights, no cache rate</td></tr>
-      <tr><td class="name">GPT-4.1 mini</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-build">Builder</span></td><td class="effort">n/a</td><td class="num">$0.40</td><td class="cache">$0.10</td><td class="num">$1.60</td><td class="why">cheaper out than GPT-5-mini</td></tr>
-      <tr class="hi"><td class="name">gemini-3-flash-preview</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$0.50</td><td class="cache">$0.05</td><td class="num">$3.00</td><td class="why">cheapest cache read on the board</td></tr>
+      <tr class="hi"><td class="name">gemini-3-flash-preview</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$0.50</td><td class="cache">$0.05</td><td class="num">$3.00</td><td class="why">LUNA now reads and writes cheaper</td></tr>
       <tr class="hi"><td class="name">Kimi K2.5</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$0.60</td><td class="cache">$0.10</td><td class="num">$3.00</td><td class="why">automatic cache, flat rate</td></tr>
       <tr><td class="name">Claude Haiku 4.5</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$5.00</td><td class="why"></td></tr>
-      <tr><td class="name">GPT-5.6-LUNA</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plus">Builder+</span></td><td class="effort">Min</td><td class="num">$1.00</td><td class="cache">$0.10</td><td class="num">$6.00</td><td class="why"></td></tr>
       <tr><td class="name">o4-mini</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-value">Batch QA</span></td><td class="effort">High</td><td class="num">$1.10</td><td class="cache">$0.275</td><td class="num">$4.40</td><td class="why">small reasoning</td></tr>
       <tr class="hi"><td class="name">GPT-5.1</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-value">Value planner</span></td><td class="effort">Med</td><td class="num">$1.25</td><td class="cache">$0.125</td><td class="num">$10.00</td><td class="why">the knife edge</td></tr>
       <tr><td class="name">gemini-3.5-flash</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-value">Value planner</span></td><td class="effort">Med</td><td class="num">$1.50</td><td class="cache">$0.15</td><td class="num">$9.00</td><td class="why"></td></tr>
       <tr><td class="name">GPT-5.2</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$1.75</td><td class="cache">$0.175</td><td class="num">$14.00</td><td class="why"></td></tr>
+      <tr class="hi"><td class="name">Claude Sonnet 5</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$2.00</td><td class="cache">$0.20</td><td class="num">$10.00</td><td class="why">cheapest planner output on the board</td></tr>
+      <tr class="hi"><td class="name">GPT-5.6-TERRA</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$2.00</td><td class="cache">$0.20</td><td class="num">$12.00</td><td class="why">cut 20% on 7/30</td></tr>
       <tr><td class="name">GPT-4.1</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plus">Builder+</span></td><td class="effort">n/a</td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">o3 reasons at the same price</td></tr>
       <tr class="hi"><td class="name">o3</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-value">Batch QA</span></td><td class="effort">High</td><td class="num">$2.00</td><td class="cache">$0.50</td><td class="num">$8.00</td><td class="why">cheapest reasoning out</td></tr>
-      <tr><td class="name">GPT-5.6-TERRA</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why"></td></tr>
-      <tr><td class="name">Claude Sonnet 4.6</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-plan">Planner</span></td><td class="effort">Med–High</td><td class="num">$3.00</td><td class="cache">$0.30</td><td class="num">$15.00</td><td class="why"></td></tr>
-      <tr><td class="name">Claude Opus 4.7</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-front">Frontier</span></td><td class="effort">High</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">cheaper out than SOL</td></tr>
+      <tr><td class="name">Claude Opus 5</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-front">Frontier</span></td><td class="effort">High</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">cheaper out than SOL</td></tr>
       <tr class="hi"><td class="name">GPT-5.6-SOL</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-front">Frontier</span></td><td class="effort">High</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">flagship</td></tr>
 
       <tr class="sect"><td colspan="8">Default migration candidates — a newer sibling matches or beats every model</td></tr>
+      <tr class="dim"><td class="name">GPT-5-mini</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use LUNA</span></td><td class="effort">—</td><td class="num">$0.25</td><td class="cache">$0.025</td><td class="num">$2.00</td><td class="why">LUNA cheaper on all three lines</td></tr>
+      <tr class="dim"><td class="name">GPT-4.1 mini</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use LUNA</span></td><td class="effort">—</td><td class="num">$0.40</td><td class="cache">$0.10</td><td class="num">$1.60</td><td class="why">LUNA cheaper on all three lines</td></tr>
       <tr class="dim"><td class="name">o3-mini</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use o4-mini</span></td><td class="effort">—</td><td class="num">$1.10</td><td class="cache">$0.55</td><td class="num">$4.40</td><td class="why">same price, 2x the cached rate</td></tr>
-      <tr class="dim"><td class="name">GPT-5</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="effort">—</td><td class="num">$1.25</td><td class="cache">$0.13</td><td class="num">$10.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">GPT-5</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="effort">—</td><td class="num">$1.25</td><td class="cache">$0.125</td><td class="num">$10.00</td><td class="why">same price, older</td></tr>
       <tr class="dim"><td class="name">GPT-4o</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use GPT-5.1</span></td><td class="effort">—</td><td class="num">$2.50</td><td class="cache">$1.25</td><td class="num">$10.00</td><td class="why">cached in 10x GPT-5.1's</td></tr>
-      <tr class="dim"><td class="name">GPT-5.4</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use TERRA</span></td><td class="effort">—</td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why">same price, older</td></tr>
-      <tr class="dim"><td class="name">claude-opus-4-6</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-dead">use Opus 4.7</span></td><td class="effort">—</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">GPT-5.4</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use TERRA</span></td><td class="effort">—</td><td class="num">$2.50</td><td class="cache">$0.25</td><td class="num">$15.00</td><td class="why">TERRA now 20% cheaper both ways</td></tr>
+      <tr class="dim"><td class="name">Claude Sonnet 4.6</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-dead">use Sonnet 5</span></td><td class="effort">—</td><td class="num">$3.00</td><td class="cache">$0.30</td><td class="num">$15.00</td><td class="why">Sonnet 5 is a third cheaper both ways</td></tr>
+      <tr class="dim"><td class="name">claude-opus-4-6</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-dead">use Opus 5</span></td><td class="effort">—</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">claude-opus-4-7</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-dead">use Opus 5</span></td><td class="effort">—</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">same price, older</td></tr>
+      <tr class="dim"><td class="name">claude-opus-4-8</td><td class="phi"><span class="sr">No</span><svg class="ic ic-no" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.9 3.9l8.2 8.2" stroke="currentColor" stroke-width="2"/></svg></td><td><span class="seat s-dead">use Opus 5</span></td><td class="effort">—</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$25.00</td><td class="why">same price, older</td></tr>
       <tr class="dim"><td class="name">GPT-5.5</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use SOL</span></td><td class="effort">—</td><td class="num">$5.00</td><td class="cache">$0.50</td><td class="num">$30.00</td><td class="why">same price, older</td></tr>
       <tr class="dim"><td class="name">o1</td><td class="phi"><span class="sr">Yes</span><svg class="ic ic-ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></td><td><span class="seat s-dead">use o3</span></td><td class="effort">—</td><td class="num">$15.00</td><td class="cache">$7.50</td><td class="num">$60.00</td><td class="why">7.5x base, 15x cached</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="tablenote">For complete up-to-date U-M AI Services compliancy information regarding permitted use and PHI, refer to the Safe Computing Guide: <a href="https://safecomputing.umich.edu/dataguide/service/75">safecomputing.umich.edu/dataguide/service/75</a></p>
+  <p class="tablenote">For complete up-to-date U-M AI Services compliancy information regarding permitted use and PHI, refer to the Safe Computing Guide: <a href="https://safecomputing.umich.edu/dataguide/service/75">safecomputing.umich.edu/dataguide/service/75</a>. The PHI column for the newly added Claude rows follows the existing Toolkit-wide classification and should be re-confirmed against that guide before any PHI-adjacent build.</p>
 
-  <h2>One feature, six ways</h2>
+  <h2>One feature, seven ways</h2>
   <p class="sub">Planner 150K in / 25K out, 50% cache hit · builder 400K in / 120K out, 70% cache hit · solo ~550K in / 145K out, 50% cache hit</p>
   <div class="effortbar">
     <span class="eff-label">Planner effort</span>
@@ -469,29 +497,33 @@ try{document.documentElement.setAttribute('data-theme',
       <button type="button" class="effbtn" data-m="3" aria-pressed="false">High ×3</button>
     </div>
   </div>
-  <p class="effnote">Multiplier scales planner-side reasoning output only; builders stay at minimal effort. ×2 / ×3 are illustrative, not measured.</p>
+  <p class="effnote">Multiplier scales planner-side reasoning output only; builders stay at minimal effort. ×2 / ×3 are illustrative, not measured. Rows are ordered by cost at ×1; raise the multiplier and the order shifts, because output rate is what compounds.</p>
   <div class="runs">
     <div class="run best" data-run="r1">
-      <div class="cfg"><b>TERRA plans → nano builds</b><span class="rb">$0.58 + $0.07 — lowest of the six illustrated configurations</span></div>
-      <div class="amt">$0.65</div>
+      <div class="cfg"><b>TERRA plans → nano builds</b><span class="rb">$0.47 + $0.07 — planner 87%</span></div>
+      <div class="amt">$0.53</div>
     </div>
     <div class="run best" data-run="r2">
+      <div class="cfg"><b>Sonnet 5 plans → LUNA builds</b><span class="rb">$0.41 + $0.17 — planner 71%</span></div>
+      <div class="amt">$0.59</div>
+    </div>
+    <div class="run best" data-run="r3">
+      <div class="cfg"><b>TERRA plans → LUNA builds</b><span class="rb">$0.47 + $0.17 — planner 73%</span></div>
+      <div class="amt">$0.64</div>
+    </div>
+    <div class="run best" data-run="r4">
       <div class="cfg"><b>SOL plans → nano builds</b><span class="rb">$1.16 + $0.07 — planner 95%</span></div>
       <div class="amt">$1.23</div>
     </div>
-    <div class="run best" data-run="r3">
-      <div class="cfg"><b>SOL plans → gemini-3-flash builds</b><span class="rb">$1.16 + $0.43 — the price twin</span></div>
-      <div class="amt">$1.60</div>
-    </div>
-    <div class="run best" data-run="r4">
+    <div class="run best" data-run="r5">
       <div class="cfg"><b>SOL plans → Kimi K2.5 builds</b><span class="rb">$1.16 + $0.46 — planner 72%</span></div>
       <div class="amt">$1.62</div>
     </div>
-    <div class="run bad" data-run="r5">
-      <div class="cfg"><b>Opus 4.7 does everything</b><span class="rb">No spec, no split</span></div>
+    <div class="run bad" data-run="r6">
+      <div class="cfg"><b>Opus 5 does everything</b><span class="rb">No spec, no split</span></div>
       <div class="amt">$5.14</div>
     </div>
-    <div class="run bad" data-run="r6">
+    <div class="run bad" data-run="r7">
       <div class="cfg"><b>SOL does everything</b><span class="rb">Same volume at flagship rates</span></div>
       <div class="amt">$5.86</div>
     </div>
@@ -504,60 +536,94 @@ try{document.documentElement.setAttribute('data-theme',
   <div class="punch">
     <h3>In this catalog, <span>the planner is the bill.</span></h3>
     <p>Intuition says the bill flips between tiers depending on which builder you pick. Even with cache estimate discounts applied everywhere, it doesn't flip — because caching only touches input, and the planner's cost is dominated by <em>output</em>, which no cache discounts:</p>
-    <span class="eq">SOL $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
-SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
+    <span class="eq">SOL   $30  ÷ nano $0.40  =  75x   → planner is 95% of spend
+SOL   $30  ÷ Kimi $3.00  =  10x   → planner is 72%
+TERRA $12  ÷ LUNA $1.20  =  10x   → planner is 73%
 5.1 planner $0.35 vs Kimi builder $0.46 → flipped, barely</span>
-    <p><strong>The consequence cuts both ways.</strong></p> <p><strong>Downward:</strong> builder price is noise — the four builder seats above span $0.07 to $0.46 on a ~$1.60 job. <strong>Choose the lowest-effective-cost builder that meets measured quality, latency, reliability, and governance requirements.</strong></p> <p><strong>Upward:</strong> Planner output is a high-leverage optimization target, alongside context retrieval, cache writes, builder retries, and review cycles.</p>
-    <p>The one configuration that reaches the flip is GPT-5.1 as a value planner — at $1.25 / $0.125 cached (estimate) / $10 it's frontier-family judgment priced like a mid-tier. Whether its review gate is strict enough for that seat is an empirical question, not a pricing one.</p>
+    <p><strong>The July 30 price cut is the cleanest test this page has had.</strong> OpenAI cut a builder-seat model 80% and a planner-seat model 20%. The 20% planner cut is what moved the illustrated bill: TERRA → nano fell from $0.65 to $0.53. The 80% builder cut is what made LUNA viable as a builder seat at all — it took that seat from $0.87 to $0.17 — but swapping nano for LUNA still only moves a ~$0.60 job by a dime.</p>
+    <p><strong>The consequence cuts both ways.</strong></p> <p><strong>Downward:</strong> builder price is noise — the builder seats above span $0.07 to $0.46 on jobs from $0.53 to $1.62. <strong>Choose the lowest-effective-cost builder that meets measured quality, latency, reliability, and governance requirements.</strong></p> <p><strong>Upward:</strong> Planner output is a high-leverage optimization target, alongside context retrieval, cache writes, builder retries, and review cycles.</p>
+    <p>The value-planner seat now has two credible occupants. GPT-5.1 at $1.25 / $0.125 cached (estimate) / $10 is still the cheapest planner on the board at $0.35 for the illustrated workload. Claude Sonnet 5 at $2.00 / $0.20 / $10 matches that output rate from a current-generation tier, which is why it lands at $0.41 and beats TERRA's $0.47 despite an identical input rate — TERRA's $12 output is the whole difference. Whether either review gate is strict enough for the seat is an empirical question, not a pricing one.</p>
   </div>
 
-  <div class="note">
-    <b>Effort levels by seat</b>
-    Reasoning effort bills as output tokens — the one line caching never discounts, and the line this page shows dominating planner cost. That makes effort a direct multiplier on the largest number in the stack, worth setting per seat rather than left at defaults:
-    <ul>
-      <li><strong>Planner:</strong> high for decomposition and spec-writing (few calls, maximum leverage per token), medium for routine diff review, escalating only when a diff gets flagged. High effort on mechanical approvals is the quiet budget leak.</li>
-      <li><strong>Batch QA:</strong> high, always — tolerating effort-driven latency off the interactive path is why the seat exists.</li>
-      <li><strong>Builder / Builder+:</strong> minimal, or thinking off. A builder burning reasoning tokens against a prescriptive spec pays planner-shaped costs at builder rates — and a builder reasoning its way around the spec is precisely the drift the review gate exists to catch.</li>
-      <li><strong>Value planner:</strong> medium by default; the seat's economics only work below flagship effort.</li>
-    </ul>
-    Two caveats. Effort knobs (reasoning_effort, thinking budgets, thinking levels) are API-level parameters, so whether U-M GPT Toolkit users can set them depends on the user's custom path or coding harness. Published cost and speed benchmarks are measured at specific effort settings, why this page carries no speed column. The Effort column in the ladder shows the recommended default for each row's seat; n/a marks non-reasoning models.
-  </div>
+  <details class="note acc">
+    <summary>
+      <span class="acc-row">
+        <b>Effort levels by seat</b>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </summary>
+    <div class="acc-body">
+      Reasoning effort bills as output tokens — the one line caching never discounts, and the line this page shows dominating planner cost. That makes effort a direct multiplier on the largest number in the stack, worth setting per seat rather than left at defaults:
+      <ul>
+        <li><strong>Planner:</strong> high for decomposition and spec-writing (few calls, maximum leverage per token), medium for routine diff review, escalating only when a diff gets flagged. High effort on mechanical approvals is the quiet budget leak.</li>
+        <li><strong>Batch QA:</strong> high, always — tolerating effort-driven latency off the interactive path is why the seat exists.</li>
+        <li><strong>Builder / Builder+:</strong> minimal, or thinking off. A builder burning reasoning tokens against a prescriptive spec pays planner-shaped costs at builder rates — and a builder reasoning its way around the spec is precisely the drift the review gate exists to catch. <strong>This now needs an explicit setting on LUNA:</strong> its documented effort range is none / low / medium / high / xhigh / max with <em>medium as the default</em>, so a builder left at defaults is a reasoning model billing reasoning output. Set it to none or low.</li>
+        <li><strong>Value planner:</strong> medium by default; the seat's economics only work below flagship effort.</li>
+        <li><strong>Claude planners and reviewers:</strong> Opus 5 runs thinking by default rather than on request, and its effort ladder tops out above the point where thinking can be disabled. Budgets carried over from an Opus 4.x deployment will under-forecast output on identical prompts.</li>
+      </ul>
+      Two caveats. Effort knobs (reasoning_effort, thinking budgets, thinking levels) are API-level parameters, so whether U-M GPT Toolkit users can set them depends on the user's custom path or coding harness. Published cost and speed benchmarks are measured at specific effort settings, why this page carries no speed column. The Effort column in the ladder shows the recommended default for each row's seat; n/a marks non-reasoning models.
+    </div>
+  </details>
 
-  <div class="note gov">
-    <b>Kimi K2.5 and gemini-3-flash-preview, one row apart</b>
-    gemini-3-flash-preview at $0.50 / $0.05 / $3.00 and Kimi K2.5 at $0.60 / $0.10 / $3.00 occupy the same Builder+ seat, a dime apart on base input and a nickel apart on estimated cache reads. The differences that remain are mechanics, not list price:
-    <ul>
-      <li><strong>Estimated Cache behavior.</strong> Kimi's caching is automatic and flat — no configuration, no storage meter. Gemini's explicit caching reads cheaper at $0.05 but adds a storage meter (~$1.00 per 1M tokens per hour held); its implicit caching estimate discounts automatically without one. For a steady agent loop the two land ahead-or-even of each other depending on prefix stability and cache lifetime estimates.</li>
-      <li><strong>Output rate is identical</strong>, and output dominates builder cost at these volumes — so the seat's real bill is the same either way.</li>
-    </ul>
-    <p>So the honest framing for a U-M department build: the two are price-equivalent within noise. Choose between them on capability fit for the workload — a real-time comparison and testing question, not a pricing one.</p>
-    <p class="tablenote">Azure hosted Kimi K2.5 slated for <a href="https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule#moonshotai">Lifecycle Retirement on 2027-01-26</a>. Updated Kimi models may change future calculations.</p>
-  </div>
+  <details class="note gov acc">
+    <summary>
+      <span class="acc-row">
+        <b>The Builder+ seat has a new floor</b>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </summary>
+    <div class="acc-body">
+      gemini-3-flash-preview at $0.50 / $0.05 / $3.00 and Kimi K2.5 at $0.60 / $0.10 / $3.00 still occupy the same Builder+ seat, a dime apart on base input and a nickel apart on estimated cache reads. What changed in July is that <strong>GPT-5.6-LUNA at $0.20 / $0.02 / $1.20 now undercuts both on all three lines</strong> — roughly 2.5x cheaper on the builder seat as modeled above. The remaining differences are mechanics and fit, not list price:
+      <ul>
+        <li><strong>Estimated cache behavior.</strong> Kimi's caching is automatic and flat — no configuration, no storage meter. Gemini's explicit caching reads cheaper at $0.05 but adds a storage meter (~$1.00 per 1M tokens per hour held); its implicit caching estimate discounts automatically without one. LUNA's caching is automatic with explicit breakpoints available and a 30-minute minimum cache life, and its writes bill at 1.25x input.</li>
+        <li><strong>Gemini and Kimi share an identical output rate</strong>, and output dominates builder cost at these volumes — so between those two the seat's real bill is the same either way.</li>
+        <li><strong>Price is no longer the reason to pick Gemini or Kimi over LUNA.</strong> Capability fit, latency under load, multimodal need, vendor concentration, and data-handling posture are — and those are testing and governance questions.</li>
+      </ul>
+      <p>So the honest framing for a U-M department build: gemini-3-flash-preview and Kimi K2.5 are price-equivalent within noise, and both now carry a real price premium over LUNA that has to be justified on something other than the rate card.</p>
+      <p class="tablenote">Azure hosted Kimi K2.5 slated for <a href="https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule#moonshotai">Lifecycle Retirement on 2027-01-26</a>. Updated Kimi models may change future calculations.</p>
+    </div>
+  </details>
 
-  <div class="note">
-    <b>Cache estimates fine print that changes billing</b>
-    <ul>
-      <li><strong>Minimums and matching.</strong> Azure OpenAI caching needs a 1,024-token minimum with an identical prefix — reads are automatic, discounts land only if stable content leads the prompt.</li>
-      <li><strong>Writes aren't always free.</strong> GPT-5.6-generation models bill cache estimate writes at 1.25x input (older OpenAI models write free). Claude bills writes at 1.25x (5-min) or 2x (1-hr). Gemini explicit caching bills storage per hour.</li>
-      <li><strong>Azure documentation now describes GPT-5.6 caching for both Chat Completions and Responses</strong>, including prompt_cache_key. Whether U-M Toolkit exposes the same behavior, reporting fields, and billing treatment should be confirmed through Toolkit telemetry or ITS documentation. </li>
-    </ul>
-  </div>
+  <details class="note acc">
+    <summary>
+      <span class="acc-row">
+        <b>Cache estimates fine print that changes billing</b>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </summary>
+    <div class="acc-body">
+      <ul>
+        <li><strong>Minimums and matching.</strong> Older Azure OpenAI caching needs a 1,024-token minimum with an identical prefix — reads are automatic, discounts land only if stable content leads the prompt. The GPT-5.6 generation adds explicit cache breakpoints and a 30-minute minimum cache life, which makes cache behavior more predictable across an agent loop.</li>
+        <li><strong>Writes aren't always free.</strong> GPT-5.6-generation models bill cache estimate writes at 1.25x input (older OpenAI models write free). Claude bills writes at 1.25x (5-min) or 2x (1-hr). Gemini explicit caching bills storage per hour. Claude's cacheable minimum also moved: Opus 5 caches from 512 tokens where Opus 4.8 needed 2,048, so short system prompts and tool schemas now cache where they previously did not.</li>
+        <li><strong>The long-context meter can double your input line.</strong> GPT-5.6 requests above 272K input tokens bill input and cached input at 2x and output at 1.5x <em>for the entire request</em> — SOL becomes $10 / $45, TERRA $4 / $18, LUNA $0.40 / $1.80. A repo-scale spec harness that assembles context aggressively can cross that threshold without anyone choosing to, which is a retrieval-discipline problem before it is a pricing one.</li>
+        <li><strong>Azure documentation now describes GPT-5.6 caching for both Chat Completions and Responses</strong>, including prompt_cache_key. Whether U-M Toolkit exposes the same behavior, reporting fields, and billing treatment should be confirmed through Toolkit telemetry or ITS documentation.</li>
+      </ul>
+    </div>
+  </details>
 
-  <div class="note">
-    <b>Housekeeping the ladder implies</b>
-    Seven rows are strictly dominated at identical or worse rates by newer siblings, and the cache estimates column widens the gap: o1 is 7.5x o3 on base rates and 15x on estimated cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on estimated cached input despite similar base pricing. Any internal model-selection guidance should prune the dominated set; left in for illustrative purposes.
-  </div>
+  <details class="note acc">
+    <summary>
+      <span class="acc-row">
+        <b>Housekeeping the ladder implies</b>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </summary>
+    <div class="acc-body">
+      Twelve rows are now strictly dominated at identical or worse rates by newer siblings — up from seven in July — and the cache estimates column widens the gap: o1 is 7.5x o3 on base rates and 15x on estimated cached input; GPT-4o's 50%-tier caching leaves it 10x GPT-5.1 on estimated cached input despite similar base pricing. Three additions are worth a policy line rather than a footnote. Claude Sonnet 4.6 and Sonnet 5 are both live at $3.00 and $2.00, so every Sonnet 4.6 call is a third more expensive than the same call one model ID over. Four Opus rows (4.6, 4.7, 4.8, 5) sit at one identical price, which means the only reason to pin an older one is behavioral reproducibility, and that reason should be written down where the pin lives. And the retirement of the mini/nano naming in the GPT-5.6 generation leaves GPT-5-mini and GPT-4.1 mini beaten on every line by LUNA. Any internal model-selection guidance should prune the dominated set; left in for illustrative purposes.
+    </div>
+  </details>
 
   </main>
 
   <footer>
-    <p>Token volumes and estimated cache-hit rates in the six-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at estimated cached rate, planner and solo 50%; estimated cache-write premiums and storage meters excluded for simplicity and noted above.</p>
+    <p>Token volumes and estimated cache-hit rates in the seven-way comparison are illustrative assumptions, labeled above, not measured. Cache-hit modeling: builders 70% of input at estimated cached rate, planner and solo 50%; estimated cache-write premiums, storage meters, and long-context meters excluded from the seven-way figures for simplicity and noted above.</p>
     <p>A speed column is intentionally excluded. Published throughput benchmarks (e.g. Artificial Analysis) measure first-party APIs at specific reasoning-effort settings, not U-M GPT Toolkit deployments; reasoning-model latency varies with effort level. Mixed-source tokens-per-second figures would be false precision for capacity planning here.</p>
-    <p>Embedding models from the U-M ITS page are omitted: a spec-driven build/review harness assembles context from repo files and search rather than an embedding index. Use them only if the harness includes a RAG retrieval layer.</p>
-    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x estimated cached-input rates, GPT-5.6 estimated cache-write multiplier); Anthropic pricing documentation (estimated cache reads at 0.1x input, write multipliers); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 estimated cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate. Updated once estimated cache rates can be confirmed from U-M ITS, potentially at a later date.</p>
+    <p>Model classes on the ITS Toolkit table but omitted here: embedding models (Ada, text-embedding-3-small, text-embedding-3-large), because a spec-driven build/review harness assembles context from repo files and search rather than an embedding index — use them only if the harness includes a RAG retrieval layer; image models (gpt-image-2, gpt-image-1.5, gemini-3.1-flash-image-preview) and gpt-realtime-2, because an SDD text harness does not call them and their per-token rates are not comparable to text rates.</p>
+    <p>Base-rate changes reflected in this edition: gpt-5.6-luna $1.00 / $6.00 to $0.20 / $1.20 and gpt-5.6-terra $2.50 / $15.00 to $2.00 / $12.00, matching OpenAI's July 30, 2026 reduction; claude-sonnet-5, claude-opus-4-8, and claude-opus-5 added. Anthropic has confirmed Sonnet 5's $2.00 / $10.00 as its standard rate and that the previously scheduled September 1, 2026 increase to $3.00 / $15.00 will not occur — third-party trackers still carrying that increase are stale.</p>
+    <p>Caching-rate sources: Azure OpenAI pricing page and Azure prompt-caching documentation on Microsoft Learn (minimums, write billing, model support matrix); OpenAI platform model and pricing pages (o-series and GPT-5.x estimated cached-input rates, GPT-5.6 estimated cache-write multiplier, 272K long-context meter); Anthropic pricing documentation (estimated cache reads at 0.1x input, write multipliers, Opus 5 cacheable minimum); Google Gemini API pricing (context-caching read and storage rates); Moonshot AI platform pricing (Kimi K2.5 estimated cached input, matching the $0.10 shown). Llama 4 serverless publishes no cache rate. Updated once estimated cache rates can be confirmed from U-M ITS, potentially at a later date.</p>
     <p>Base rates: U-M ITS AI Services pricing page, per 1M tokens as published.</p>
     <div class="disclaimer">
-      Sources derived from: <a href="https://its.umich.edu/computing/ai/pricing">https://its.umich.edu/computing/ai/pricing</a> in addition to Azure model catalog pricing, OpenAI, Anthropic, Google Gemini, and Moonshot AI published pricing as of 7/25/2026. Page developed with assistance from GenAI and Ross IT.
+      Sources derived from: <a href="https://its.umich.edu/computing/ai/pricing">https://its.umich.edu/computing/ai/pricing</a> in addition to Azure model catalog pricing, OpenAI, Anthropic, Google Gemini, and Moonshot AI published pricing as of 8/18/2026. Page developed with assistance from GenAI and Ross IT.
     </div>
   </footer>
 
@@ -681,14 +747,17 @@ SOL $30  ÷ Kimi $3.00  =  10x   → planner is 72%
     }
   }
   function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(updSticky);}}
-  // Planner-effort selector: scales planner-side reasoning output in the six-way runs.
+  // Planner-effort selector: scales planner-side reasoning output in the seven-way runs.
+  // Derived from the August 2026 rates: planner 150K in @50% cache + 25K out;
+  // builder 400K in @70% cache + 120K out; solo 550K in @50% cache + 145K out.
   var effData={
-    r1:{pIn:0.20625,pOut:0.375,b:0.067,note:'the published floor'},
-    r2:{pIn:0.4125,pOut:0.75,b:0.067,note:null},
-    r3:{pIn:0.4125,pOut:0.75,b:0.434,note:'the price twin'},
-    r4:{pIn:0.4125,pOut:0.75,b:0.46,note:null},
-    r5:{fix:4.5125,pOut:0.625},
-    r6:{fix:5.1125,pOut:0.75}
+    r1:{pIn:0.165,  pOut:0.30, b:0.067, note:null},   // TERRA   $2.00/$0.20/$12 -> nano
+    r2:{pIn:0.165,  pOut:0.25, b:0.1736,note:null},   // Sonnet5 $2.00/$0.20/$10 -> LUNA
+    r3:{pIn:0.165,  pOut:0.30, b:0.1736,note:null},   // TERRA                   -> LUNA
+    r4:{pIn:0.4125, pOut:0.75, b:0.067, note:null},   // SOL     $5.00/$0.50/$30 -> nano
+    r5:{pIn:0.4125, pOut:0.75, b:0.46,  note:null},   // SOL                     -> Kimi K2.5
+    r6:{fix:4.5125, pOut:0.625},                      // Opus 5 solo
+    r7:{fix:5.1125, pOut:0.75}                        // SOL solo
   };
   function fmt(v){return '$'+v.toFixed(2);}
   function applyEffort(m){
